@@ -1,23 +1,20 @@
 <template>
     <div class="">
-
-      <q-carousel
+            <q-carousel
         animated
         v-model="slide"
         infinite
-        swipeable
-        :autoplay="10000"
-        @mouseenter="autoplay = false"
-        @mouseleave="autoplay = true"
+        :autoplay="autoplay"
         transition-next="slide-fade"
-
+        transition-prev="slide-fade"
+        @mouseenter="autoplay = 0"
+        @mouseleave="autoplay = 8000"
       >
         <q-carousel-slide :name="1" img-src="https://cdn.quasar.dev/img/mountains.jpg" />
         <q-carousel-slide :name="2" img-src="https://cdn.quasar.dev/img/parallax1.jpg" />
         <q-carousel-slide :name="3" img-src="https://cdn.quasar.dev/img/parallax2.jpg" />
         <q-carousel-slide :name="4" img-src="https://cdn.quasar.dev/img/quasar.jpg" />
       </q-carousel>
-
   </div>
 </template>
 
@@ -26,42 +23,22 @@ export default {
   data () {
     return {
       slide: 1,
-      autoplay: true
+      autoplay: 8000
     }
   }
 }
 </script>
 <style>
-/* Enter and leave animations can use different */
-/* durations and timing functions.              */
-.custom-enter-active {
-  transition: all 3s ease;
+
+.q-transition--slide-fade-enter-active {
+  transition: all 3s cubic-bezier(0.33, 1, 0.68, 1);;
 }
-.custom-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+.q-transition--slide-fade-leave-active {
+  transition: all 3s cubic-bezier(0.32, 0, 0.67, 0);
 }
-.custom-enter, .custom-leave-to {
-  transform: translateX(10px);
+.q-transition--slide-fade-enter, .q-transition--slide-fade-leave-to
+ {
   opacity: 0;
-}
-.custom-right .custom-left {
-  transition: all 3s ease;
-}
-.q-transition-custom {
-  transition: all 3s ease;
-}
-.slide-fade-enter-active {
-  transition: all 2s ease;
-}
-.slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateY(30px);
-  opacity: 0;
-}
-q-transition--slide-fade {
-  transition: all 2s ease;
+  position: absolute;
 }
 </style>

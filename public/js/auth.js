@@ -15,11 +15,13 @@ function initClient() {
   // Get API key and client ID from API Console.
   // 'scope' field specifies space-delimited list of access scopes.
   gapi.load('client:auth2', () => {
+    //TODO
+    const apiKey = localStorage.getItem('API-KEY')
     gapi.client
       .init({
-        apiKey: 'AIzaSyA4nwbtxltI-UpHkugXVYv2nY-I7ElYCiE',
+        apiKey: apiKey,
         clientId:
-          '248651903228-u4bn4gn43cp113lmt14snavs0vptnq8s.apps.googleusercontent.com',
+          '773738037107-50714q5fdotjmh884clsghir2bljqj4t.apps.googleusercontent.com',
         discoveryDocs: [
           'https://photoslibrary.googleapis.com/$discovery/rest?version=v1'
         ],

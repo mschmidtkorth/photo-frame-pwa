@@ -26,7 +26,9 @@
       color="primary"
       rounded
       icon="warning"
-      label="Sign In With Google"
+      label="Authorize PhotoAh"
+      title="Authorize PhotoAh to view your google photos
+"
     />
     <q-btn
       disable
@@ -39,22 +41,26 @@
       label="Create Album"
     />
     <q-dialog v-model="apikeyAlert">
-      <q-card>
+      <q-card style="min-width: 350px">
         <q-card-section>
-          <div class="text-h6">Retrieve API Key</div>
+          <div class="text-h6">API Key</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          In order to save the API Key to the app, you must click on an
-          appropiate url containing the API Key as part of the query string.
-          E.g. https://photoah.com?apiKey=XXXX-XXXXXXXX
+          <q-input
+            dense
+            v-model="apikey"
+            autofocus
+            @keyup.enter="prompt = false"
+          />
         </q-card-section>
 
-        <q-card-actions align="right">
-          <q-btn flat label="OK" color="primary" v-close-popup />
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Update API KEY" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
+
     <!-- <div class="q-pa-md">
       <q-btn
         color="secondary"
@@ -68,6 +74,12 @@
 
 <script>
 import Vue from 'vue'
+
+/* eslint no-unused-vars: 1 */
+// eslint-disable-next-line
+import { LocalStorage, SessionStorage } from 'quasar'
+
+const apikeyKey = 'apikey'
 export default Vue.extend({
   name: 'PageHome',
   data () {
@@ -84,7 +96,24 @@ export default Vue.extend({
       // set button state accordingly
     }
   },
-  mounted () {}
+  watch: {
+    apikey: function (val) {
+      LocalStorage.set(apikeyKey, val)
+    }
+  },
+  mounted () {
+    // load API KEY from storage
+    let lsApikey = LocalStorage.getItem(apikeyKey)
+    if (lsApikey === 'null') lsApikey = null
+
+    // console.log('apikey: ' + JSON.parse(this.apikey))
+    if (lsApikey) {
+      this.apikey = lsApikey
+
+      this.authReady = true
+    }
+    // console.log('apikey: ' + this.apikey)
+  }
 })
 </script>
 <style></style>

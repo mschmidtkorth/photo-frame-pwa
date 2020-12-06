@@ -13,7 +13,8 @@
     "@quasar/extras": "^1.9.10",
     "core-js": "^3.6.5",
     "jquery": "^3.5.1",
-    "quasar": "^1.0.0"
+    "quasar": "^1.0.0",
+    "vuex-pathify": "^1.4.4"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",

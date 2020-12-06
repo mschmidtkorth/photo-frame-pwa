@@ -19,6 +19,7 @@
           name="slideshow"
           icon="panorama"
           label="Slideshow"
+          :disable="!authReady"
         />
         <q-route-tab to="/" name="settings" icon="settings" label="Settings" />
         <q-route-tab to="/help" name="help" icon="support" label="Help" />
@@ -33,12 +34,17 @@
 
 <script>
 import Vue from 'vue'
+import { get } from 'vuex-pathify'
+
 export default Vue.extend({
   name: 'MainLayout',
   data () {
     return {
       tab: 'settings'
     }
+  },
+  computed: {
+    authReady: get('app/authReady')
   }
 })
 </script>

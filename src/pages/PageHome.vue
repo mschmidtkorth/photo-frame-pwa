@@ -64,6 +64,8 @@
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancel" color="primary" v-close-popup />
+
           <q-btn flat label="Update API KEY" v-close-popup />
         </q-card-actions>
       </q-card>
@@ -117,7 +119,7 @@ export default Vue.extend({
   computed: {
     apikey: {
       get () {
-        return this.$store.get('app/apikey')
+        return get('app/apikey')
       },
       set (val) {
         this.$store.set('app/apikey', val)

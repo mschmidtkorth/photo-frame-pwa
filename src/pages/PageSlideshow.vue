@@ -31,10 +31,13 @@
 </template>
 
 <script>
-import Vue from 'vue'
+// import Vue from 'vue'
 import { get } from 'vuex-pathify'
+// import { store } from '../store/index'
 
-export default Vue.extend({
+// export default Vue.extend({
+
+export default {
   data () {
     return {
       slide: 1,
@@ -45,7 +48,7 @@ export default Vue.extend({
     images: get('app/images')
   },
   methods: {}
-})
+}
 </script>
 <style>
 .q-transition--slide-fade-enter-active {

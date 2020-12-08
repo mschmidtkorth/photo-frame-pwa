@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
+// import Vue from 'vue'
 
 /* eslint no-unused-vars: 1 */
 // eslint-disable-next-line
@@ -91,7 +91,8 @@ import { LocalStorage, SessionStorage } from 'quasar'
 import { get } from 'vuex-pathify'
 import ImageSerivceFactory from '../services/imageService'
 
-export default Vue.extend({
+// export default Vue.extend({
+export default {
   name: 'PageHome',
   data () {
     return {
@@ -136,6 +137,6 @@ export default Vue.extend({
       }
     }
   }
-})
+}
 </script>
 <style></style>

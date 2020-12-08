@@ -21,10 +21,17 @@ function ViewModel () {
       })
   }
   self.getAlbumImageChunk = function (id, nextPageToken) {
+    const h = window.innerHeight
+    const w = window.innerWidth
+
     return self.gapiClient.photoslibrary.mediaItems
       .search({ albumId: id, pageToken: nextPageToken, pageSize: 100 })
       .then(function (response) {
-        self.images = self.images.concat(response.result.mediaItems)
+        self.images = self.images.concat(
+          response.result.mediaItems.map(img => {
+            return `${img.baseUrl}=w${w}-h${h}`
+          })
+        )
         return response.result.nextPageToken
       })
       .catch(function (e) {

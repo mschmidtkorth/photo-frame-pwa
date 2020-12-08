@@ -19,7 +19,7 @@
           name="slideshow"
           icon="panorama"
           label="Slideshow"
-          :disable="!authReady"
+          :disable="!albumLoaded"
         />
         <q-route-tab to="/" name="settings" icon="settings" label="Settings" />
         <q-route-tab to="/help" name="help" icon="support" label="Help" />
@@ -44,7 +44,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    authReady: get('app/authReady')
+    albumLoaded: get('app/images@length')
   }
 })
 </script>

@@ -4,7 +4,10 @@ const state = {
   images: [],
   error: '',
   loading: false,
-  authReady: true
+  authReady: false,
+  isSignedIn: false,
+  apikey: '',
+  albumLoaded: false
 }
 
 const mutations = make.mutations(state)

@@ -1,13 +1,5 @@
 <template>
   <q-page class="constrain q-pa-md">
-    <div class="row justify-center q-mb-lg">
-      <p v-if="!photoAlbumTitle" class="text-body1 text-weight-bold">
-        TIP: First step is to add new album in your
-        <a href="https://photos.google.com" target="_blank">Google Photos</a>
-        named "PhotoAh". Share it with friends and family so they can add photos
-        to your album.
-      </p>
-    </div>
     <q-btn
       class="full-width constrain-fw"
       size="xl"
@@ -20,26 +12,42 @@
     />
 
     <q-btn
+      :disable="apikey == ''"
       class="full-width constrain-fw"
       size="xl"
       padding="xl xl"
       color="primary"
       rounded
-      icon="warning"
-      label="Authorize PhotoAh"
-      title="Authorize PhotoAh to view your google photos
-"
+      :icon="isSignedIn ? 'check' : 'warning'"
+      :label="isSignedIn ? 'Granted Photoah Access' : 'Authorize PhotoAh'"
+      @click="setAuthStatus"
+      :loading="authInProgress"
     />
-    <q-btn
-      disable
-      class="full-width constrain-fw"
-      size="xl"
-      padding="xl xl"
-      color="primary"
-      rounded
-      icon="panorama"
-      label="Create Album"
-    />
+
+    <div class="text-center">
+      <q-banner
+        v-show="albumLoaded"
+        inline-actions
+        class="text-white bg-positive"
+        animated
+      >
+        PhotoAh album has been loaded, click the "Slideshow" button to start
+        it.<br />
+        TIP: Share the PhotoAh album with friends and family so they can add
+        photos to your album.
+      </q-banner>
+
+      <q-banner
+        v-show="apikey !== '' && isSignedIn && !albumLoaded"
+        inline-actions
+        class="text-white bg-red"
+        animated
+      >
+        PhotoAh album not found, please create an album titled "PhotoAh" in your
+        <a href="https://photos.google.com" target="_blank">Google Photos</a>.
+      </q-banner>
+    </div>
+
     <q-dialog v-model="apikeyAlert">
       <q-card style="min-width: 350px">
         <q-card-section>
@@ -78,41 +86,53 @@ import Vue from 'vue'
 /* eslint no-unused-vars: 1 */
 // eslint-disable-next-line
 import { LocalStorage, SessionStorage } from 'quasar'
+import { get } from 'vuex-pathify'
+import ImageSerivceFactory from '../services/imageService'
 
-const apikeyKey = 'apikey'
 export default Vue.extend({
   name: 'PageHome',
   data () {
     return {
       apikeyAlert: false,
-      apikey: '',
-      isSignedIn: false,
-      photoAlbumTitle: ''
+      authInProgress: false
     }
   },
   methods: {
-    initAuth () {
-      // check for auth object
-      // set button state accordingly
+    setAuthStatus: async function () {
+      if (this.isSignedIn) {
+        this.$gAuth.signOut()
+      } else {
+        this.authInProgress = true
+        await this.$gAuth.signIn()
+        await this.loadImages()
+        this.authInProgress = false
+      }
+    },
+    loadImages: async function () {
+      const imageService = new ImageSerivceFactory()
+      await imageService.init()
+      this.$store.set('app/images', imageService.images)
     }
+  },
+  computed: {
+    apikey: {
+      get () {
+        return this.$store.get('app/apikey')
+      },
+      set (val) {
+        this.$store.set('app/apikey', val)
+        LocalStorage.set('apikey', val)
+      }
+    },
+    isSignedIn: get('app/isSignedIn'),
+    albumLoaded: get('app/images@length')
   },
   watch: {
-    apikey: function (val) {
-      LocalStorage.set(apikeyKey, val)
+    isSignedIn: function () {
+      if (this.isSignedIn) {
+        this.loadImages()
+      }
     }
-  },
-  mounted () {
-    // load API KEY from storage
-    let lsApikey = LocalStorage.getItem(apikeyKey)
-    if (lsApikey === 'null') lsApikey = null
-
-    // console.log('apikey: ' + JSON.parse(this.apikey))
-    if (lsApikey) {
-      this.apikey = lsApikey
-
-      this.authReady = true
-    }
-    // console.log('apikey: ' + this.apikey)
   }
 })
 </script>

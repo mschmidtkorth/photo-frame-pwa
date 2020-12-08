@@ -31,21 +31,21 @@
 </template>
 
 <script>
-export default {
+import Vue from 'vue'
+import { get } from 'vuex-pathify'
+
+export default Vue.extend({
   data () {
     return {
       slide: 1,
-      autoplay: 8000,
-      images: [
-        'https://cdn.quasar.dev/img/quasar.jpg',
-        'https://cdn.quasar.dev/img/parallax2.jpg',
-        'https://cdn.quasar.dev/img/parallax1.jpg',
-        'https://cdn.quasar.dev/img/mountains.jpg'
-      ]
+      autoplay: 8000
     }
   },
+  computed: {
+    images: get('app/images')
+  },
   methods: {}
-}
+})
 </script>
 <style>
 .q-transition--slide-fade-enter-active {

@@ -92,6 +92,7 @@ import ImageSerivceFactory from '../services/imageService'
 export default {
   name: 'PageHome',
   data () {
+    // debugger
     return {
       apikeyAlert: false,
       authInProgress: false

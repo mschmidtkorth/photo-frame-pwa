@@ -39,6 +39,9 @@ module.exports = function (/* ctx */) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
+      env: {
+        appName: 'PhotoAh'
+      },
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       devtool: 'source-map',
 

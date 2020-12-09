@@ -85,9 +85,6 @@
 <script>
 // import Vue from 'vue'
 
-/* eslint no-unused-vars: 1 */
-// eslint-disable-next-line
-import { LocalStorage, SessionStorage } from 'quasar'
 import { get } from 'vuex-pathify'
 import ImageSerivceFactory from '../services/imageService'
 
@@ -119,12 +116,9 @@ export default {
   },
   computed: {
     apikey: {
-      get () {
-        return get('app/apikey')
-      },
+      get: get('app/apikey'),
       set (val) {
-        this.$store.set('app/apikey', val)
-        LocalStorage.set('apikey', val)
+        this.$store.dispatch('app/setApikey', val)
       }
     },
     isSignedIn: get('app/isSignedIn'),

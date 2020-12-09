@@ -37,7 +37,7 @@ function GAuth (gapi, store) {
 
   this.initClient = async function () {
     const apikey = store.get('app/apikey')
-    if (apikey === '') return
+    if (apikey === '' || apikey === 'null') return
     await gapi.client.init({
       apiKey: apikey,
       clientId:

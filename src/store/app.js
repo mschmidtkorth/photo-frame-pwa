@@ -1,6 +1,6 @@
 import { make } from 'vuex-pathify'
 import { LocalStorage } from 'quasar'
-// const apikey = LocalStorage.get('apikey')
+const apikey = LocalStorage.getItem('apikey')
 
 const state = {
   images: [],
@@ -8,7 +8,7 @@ const state = {
   loading: false,
   authReady: false,
   isSignedIn: false,
-  apikey: null,
+  apikey: apikey,
   albumLoaded: false
 }
 

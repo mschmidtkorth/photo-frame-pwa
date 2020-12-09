@@ -1,5 +1,4 @@
 import { boot } from 'quasar/wrappers'
-import { LocalStorage } from 'quasar'
 
 const SCOPE = 'https://www.googleapis.com/auth/photoslibrary.readonly'
 
@@ -70,7 +69,6 @@ export default boot(async ({ app, router, store, Vue }) => {
   // something to do
   // await something()
   try {
-    store.set('app/apikey', LocalStorage.getItem('apikey'))
     await installClient()
     const gapi = await initClient()
     Vue.prototype.$gAuth = new GAuth(gapi, store)

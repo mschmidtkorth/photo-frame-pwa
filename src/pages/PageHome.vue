@@ -106,7 +106,14 @@ export default {
       if (this.$store.isSignedIn) {
         this.$gAuth.signOut()
       } else {
-        await this.$gAuth.signIn()
+        try {
+          await this.$gAuth.signIn()
+        } catch (e) {
+          this.apikey = ''
+          this.$q.dialog({
+            message: 'Invalid Api Key, please set a valid Api Key'
+          })
+        }
       }
     }
   }

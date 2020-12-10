@@ -6,7 +6,7 @@
       padding="xl xl"
       color="primary"
       rounded
-      :icon="$store.apikey ? 'check' : 'warning'"
+      :icon="$store.validApikey() ? 'check' : 'warning'"
       label="Set API Key"
       @click="apikeyDialog = true"
     />
@@ -23,7 +23,7 @@
         $store.isSignedIn ? 'Granted Photoah Access' : 'Authorize PhotoAh'
       "
       @click="setAuthStatus"
-      :loading="authInProgress"
+      :loading="$store.authInProgress"
     />
 
     <div class="text-center">
@@ -40,7 +40,12 @@
       </q-banner>
 
       <q-banner
-        v-show="$store.isSignedIn && !$store.albumLoaded && !authInProgress"
+        v-show="
+          $store.isSignedIn &&
+            !$store.albumLoaded() &&
+            !$store.authInProgress &&
+            !$store.imagesLoading
+        "
         inline-actions
         class="text-white bg-red"
         animated
@@ -82,15 +87,12 @@
 </template>
 
 <script>
-import ImageSerivceFactory from '../services/imageService'
 import { store } from '../boot/store'
 export default {
   name: 'PageHome',
   data () {
     return {
       apikeyDialog: false,
-      // TODO move into gAuth/SignIn and have it update store
-      authInProgress: false,
       apikey: store.apikey,
       $store: store
     }
@@ -101,28 +103,10 @@ export default {
       this.$actions.setApikey(this.apikey)
     },
     setAuthStatus: async function () {
-      if (this.isSignedIn) {
+      if (this.$store.isSignedIn) {
         this.$gAuth.signOut()
       } else {
-        this.authInProgress = true
         await this.$gAuth.signIn()
-        await this.loadImages()
-        this.authInProgress = false
-      }
-    },
-    loadImages: async function () {
-      // TODO move into store, gauth
-      const imageService = new ImageSerivceFactory()
-      await imageService.init()
-      this.$store.images = imageService.images
-    }
-  },
-  // TODO make apikey computed so that it can call setApikey on store
-  watch: {
-    isSignedIn: function () {
-      if (this.isSignedIn) {
-        console.log('is signed in')
-        this.loadImages()
       }
     }
   }

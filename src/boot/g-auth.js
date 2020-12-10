@@ -1,4 +1,5 @@
 import { boot } from 'quasar/wrappers'
+import { loadImages } from './../services/imageService'
 
 const SCOPE = 'https://www.googleapis.com/auth/photoslibrary.readonly'
 
@@ -29,11 +30,13 @@ function GAuth (gapi, store) {
   this.gapi = gapi
   this.store = store
   this.authInstance = null
-  this.setSigninStatus = function () {
+  this.setSigninStatus = async function () {
     const user = this.authInstance.currentUser.get()
     store.isSignedIn = user.hasGrantedScopes(SCOPE)
     if (store.isSignedIn) {
       // TODO load images
+
+      await loadImages()
     }
   }
 
@@ -55,12 +58,14 @@ function GAuth (gapi, store) {
   }
 
   this.signIn = async function () {
+    this.store.authInProgress = true
     if (this.authInstance == null) {
       await this.initClient()
     }
     if (!this.authInstance.isSignedIn.get()) {
       await this.authInstance.signIn()
     }
+    this.store.authInProgress = false
   }
   this.signOut = async function () {
     this.authInstance.signOut()

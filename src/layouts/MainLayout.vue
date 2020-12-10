@@ -19,7 +19,7 @@
           name="slideshow"
           icon="panorama"
           label="Slideshow"
-          :disable="!albumLoaded"
+          :disable="!$store.albumLoaded"
         />
         <q-route-tab to="/" name="settings" icon="settings" label="Settings" />
         <q-route-tab to="/help" name="help" icon="support" label="Help" />
@@ -33,22 +33,17 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import { store } from '../boot/store'
 
-export default Vue.extend({
+export default {
   name: 'MainLayout',
   data () {
     return {
-      tab: 'settings'
-    }
-  },
-
-  computed: {
-    albumLoaded () {
-      return this.$store.albumLoaded()
+      tab: 'settings',
+      $store: store
     }
   }
-})
+}
 </script>
 <style lang="sass">
 .q-toolbar__title

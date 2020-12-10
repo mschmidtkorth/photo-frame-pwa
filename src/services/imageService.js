@@ -1,33 +1,30 @@
-window.photoFrame = window.photoFrame || {}
+import { store } from '../boot/store'
 
-function ViewModel () {
-  var self = this
-  self.gapiClient = null
-  self.images = []
-  self.initialized = false
-  self.shuffle = function shuffleArray (arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-      ;[arr[i], arr[j]] = [arr[j], arr[i]]
-    }
-    return arr
+const shuffle = function (arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
   }
-  self.loadAlbums = function () {
-    return self.gapiClient.photoslibrary.albums
-      .list({})
-      .then(function (fullResponse) {
-        const albums = fullResponse.result.albums
-        return albums
-      })
-  }
-  self.getAlbumImageChunk = function (id, nextPageToken) {
+  return arr
+}
+const loadAlbums = function () {
+  return window.gapi.client.photoslibrary.albums
+    .list({})
+    .then(function (fullResponse) {
+      const albums = fullResponse.result.albums
+      return albums
+    })
+}
+const getImages = async function (id) {
+  let images = []
+  const getAlbumImageChunk = function (id, nextPageToken) {
     const h = window.innerHeight
     const w = window.innerWidth
 
-    return self.gapiClient.photoslibrary.mediaItems
+    return window.gapi.client.photoslibrary.mediaItems
       .search({ albumId: id, pageToken: nextPageToken, pageSize: 100 })
       .then(function (response) {
-        self.images = self.images.concat(
+        images = images.concat(
           response.result.mediaItems.map(img => {
             return `${img.baseUrl}=w${w}-h${h}`
           })
@@ -38,35 +35,38 @@ function ViewModel () {
         return undefined
       })
   }
-  self.getImages = async function (id) {
-    const response = await self.gapiClient.photoslibrary.albums.get({
-      albumId: id
-    })
-    const album = response.result
-    var nextPageToken = null
-    var i = 0
-    while (self.images.length < Number(album.mediaItemsCount) && i < 5) {
-      await self
-        .getAlbumImageChunk(id, nextPageToken)
-        .then(token => (nextPageToken = token))
-      i++
-    }
+  const response = await window.gapi.client.photoslibrary.albums.get({
+    albumId: id
+  })
+  const album = response.result
+  var nextPageToken = null
+  var i = 0
+  while (images.length < Number(album.mediaItemsCount) && i < 5) {
+    await getAlbumImageChunk(id, nextPageToken).then(
+      token => (nextPageToken = token)
+    )
+    i++
   }
-  self.init = async function () {
-    self.gapiClient = window.gapi.client
-    const albums = await self.loadAlbums()
-    const result = albums.filter(a => {
-      return a.title === 'PhotoAh'
-    })
-    if (result.length !== 1) {
-      // TODO show user a message about creating album
-      console.log("'Photo Frame' album not found")
-      return
-    }
-    await self.getImages(result[0].id)
-    self.initialized = true
-    // self.slick = $('.carousel').slick(self.slickSettings)
-    console.log(`Found ${self.images.length} images`)
-  }
+  return images
 }
-export default ViewModel
+const loadImages = async function () {
+  store.imagesLoading = true
+  const albums = await loadAlbums()
+  const result = albums.filter(a => {
+    return a.title === 'PhotoAh'
+  })
+  if (result.length !== 1) {
+    // TODO show user a message about creating album
+    console.log("'Photo Frame' album not found")
+    return
+  }
+  const loadedImages = await getImages(result[0].id)
+  if (loadedImages) {
+    store.images = loadedImages
+  }
+  // self.slick = $('.carousel').slick(self.slickSettings)
+  console.log(`Found ${store.images.length} images`)
+  store.imagesLoading = false
+}
+
+export { loadImages }

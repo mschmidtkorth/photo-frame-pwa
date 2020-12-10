@@ -31,11 +31,14 @@ function GAuth (gapi, store) {
   this.authInstance = null
   this.setSigninStatus = function () {
     const user = this.authInstance.currentUser.get()
-    store.set('app/isSignedIn', user.hasGrantedScopes(SCOPE))
+    store.isSignedIn = user.hasGrantedScopes(SCOPE)
+    if (store.isSignedIn) {
+      // TODO load images
+    }
   }
 
   this.initClient = async function () {
-    const apikey = store.get('app/apikey')
+    const apikey = this.store.apikey
     if (apikey === '' || apikey === 'null') return
     await gapi.client.init({
       apiKey: apikey,
@@ -61,18 +64,18 @@ function GAuth (gapi, store) {
   }
   this.signOut = async function () {
     this.authInstance.signOut()
-    store.set('app/isSignedIn', false)
+    this.store.isSignedIn = false
   }
   this.initClient()
 }
-export default boot(async ({ app, router, store, Vue }) => {
+export default boot(async ({ Vue }) => {
   // something to do
   // await something()
   try {
     await installClient()
     const gapi = await initClient()
-    Vue.prototype.$gAuth = new GAuth(gapi, store)
-    store.set('app/authReady', true)
+    Vue.prototype.$gAuth = new GAuth(gapi, Vue.prototype.$store)
+    Vue.prototype.$store.authReady = true
     console.log('client installed')
   } catch (e) {
     console.log('error loading gAuth: ' + e.message)

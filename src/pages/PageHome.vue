@@ -6,27 +6,29 @@
       padding="xl xl"
       color="primary"
       rounded
-      :icon="apikey ? 'check' : 'warning'"
+      :icon="$store.apikey ? 'check' : 'warning'"
       label="Set API Key"
       @click="apikeyAlert = true"
     />
 
     <q-btn
-      :disable="apikey == ''"
+      :disable="$store.apikey == ''"
       class="full-width constrain-fw"
       size="xl"
       padding="xl xl"
       color="primary"
       rounded
-      :icon="isSignedIn ? 'check' : 'warning'"
-      :label="isSignedIn ? 'Granted Photoah Access' : 'Authorize PhotoAh'"
+      :icon="$store.isSignedIn ? 'check' : 'warning'"
+      :label="
+        $store.isSignedIn ? 'Granted Photoah Access' : 'Authorize PhotoAh'
+      "
       @click="setAuthStatus"
       :loading="authInProgress"
     />
 
     <div class="text-center">
       <q-banner
-        v-show="albumLoaded"
+        v-show="$store.albumLoaded()"
         inline-actions
         class="text-white bg-positive"
         animated
@@ -38,7 +40,7 @@
       </q-banner>
 
       <q-banner
-        v-show="apikey !== '' && isSignedIn && !albumLoaded"
+        v-show="$store.isSignedIn && !$store.albumLoaded && !authInProgress"
         inline-actions
         class="text-white bg-red"
         animated
@@ -56,49 +58,49 @@
 
         <q-card-section class="q-pt-none">
           <q-input
+            name="apikey_field"
             dense
-            v-model="apikey"
+            v-model="testInput"
+            @keyup.enter="updateApikey()"
             autofocus
-            @keyup.enter="prompt = false"
           />
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancel" color="primary" v-close-popup />
 
-          <q-btn flat label="Update API KEY" v-close-popup />
+          <q-btn
+            flat
+            label="Update API KEY"
+            v-close-popup
+            @click="updateApikey"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
-
-    <!-- <div class="q-pa-md">
-      <q-btn
-        color="secondary"
-        @click="$q.fullscreen.toggle()"
-        :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
-        :label="$q.fullscreen.isActive ? 'Exit Fullscreen' : 'Go Fullscreen'"
-      />
-    </div> -->
   </q-page>
 </template>
 
 <script>
-// import Vue from 'vue'
-
-import { get } from 'vuex-pathify'
 import ImageSerivceFactory from '../services/imageService'
-
-// export default Vue.extend({
+import { store } from '../boot/store'
 export default {
   name: 'PageHome',
   data () {
-    // debugger
     return {
       apikeyAlert: false,
-      authInProgress: false
+      // TODO move into gAuth/SignIn and have it update store
+      authInProgress: false,
+      testInput: 'AIzaSyD6ai2etV_mA2A-GLmYuM0IuDkpsTsaUXk',
+      $store: store
     }
   },
   methods: {
+    updateApikey: function () {
+      this.apikeyAlert = false
+      console.log('update api key: ' + this.testInput)
+      // this.$q.dialog({ message: 'apikey updated' })
+    },
     setAuthStatus: async function () {
       if (this.isSignedIn) {
         this.$gAuth.signOut()
@@ -110,24 +112,17 @@ export default {
       }
     },
     loadImages: async function () {
+      // TODO move into store, gauth
       const imageService = new ImageSerivceFactory()
       await imageService.init()
-      this.$store.set('app/images', imageService.images)
+      this.$store.images = imageService.images
     }
   },
-  computed: {
-    apikey: {
-      get: get('app/apikey'),
-      set (val) {
-        this.$store.dispatch('app/setApikey', val)
-      }
-    },
-    isSignedIn: get('app/isSignedIn'),
-    albumLoaded: get('app/images@length')
-  },
+  // TODO make apikey computed so that it can call setApikey on store
   watch: {
     isSignedIn: function () {
       if (this.isSignedIn) {
+        console.log('is signed in')
         this.loadImages()
       }
     }

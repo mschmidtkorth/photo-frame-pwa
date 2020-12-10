@@ -31,12 +31,6 @@
 </template>
 
 <script>
-// import Vue from 'vue'
-import { get } from 'vuex-pathify'
-// import { store } from '../store/index'
-
-// export default Vue.extend({
-
 export default {
   data () {
     return {
@@ -45,9 +39,10 @@ export default {
     }
   },
   computed: {
-    images: get('app/images')
-  },
-  methods: {}
+    images () {
+      return this.$store.images
+    }
+  }
 }
 </script>
 <style>

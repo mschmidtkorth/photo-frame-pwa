@@ -34,7 +34,6 @@
 
 <script>
 import Vue from 'vue'
-import { get } from 'vuex-pathify'
 
 export default Vue.extend({
   name: 'MainLayout',
@@ -43,8 +42,11 @@ export default Vue.extend({
       tab: 'settings'
     }
   },
+
   computed: {
-    albumLoaded: get('app/images@length')
+    albumLoaded () {
+      return this.$store.albumLoaded()
+    }
   }
 })
 </script>

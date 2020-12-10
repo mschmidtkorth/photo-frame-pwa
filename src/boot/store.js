@@ -2,17 +2,17 @@ import Vue from 'vue'
 import { LocalStorage } from 'quasar'
 const apikey = LocalStorage.getItem('apikey')
 
-const store = Vue.observable({
+export const store = Vue.observable({
   images: [],
-  error: '',
-  loading: false,
+  imagesLoading: true,
   authReady: false,
   isSignedIn: false,
   apikey: apikey,
-  albumLoaded: false
+  albumLoaded: function () {
+    return this.images.length > 0
+  }
 })
-
-const actions = {
+export const actions = {
   setApikey: function (val) {
     if (val === 'null' || val === null) return
     store.apikey = val

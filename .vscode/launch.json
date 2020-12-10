@@ -6,16 +6,17 @@
   "configurations": [
     {
       "type": "chrome",
-      "request": "launch",
+      "request": "attach",
       "name": "Quasar App: chrome",
-      "url": "http://localhost:8080",
+      "url": "http://localhost:8080/#/",
       "port": 9222,
-      "userDataDir": false,
-      "webRoot": "${workspaceFolder}/src",
-      "breakOnLoad": true,
+      "webRoot": "${workspaceFolder}",
       "sourceMapPathOverrides": {
-        "webpack:///./src/*": "${webRoot}/*"
+        "webpack:///*": "${webRoot}/*"
       }
+      // "sourceMapPathOverrides": {
+      //   "webpack:///./src/*": "${webRoot}/*"
+      // }
     }
   ]
 }

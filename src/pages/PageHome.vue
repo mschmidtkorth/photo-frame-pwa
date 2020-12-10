@@ -8,11 +8,11 @@
       rounded
       :icon="$store.apikey ? 'check' : 'warning'"
       label="Set API Key"
-      @click="apikeyAlert = true"
+      @click="apikeyDialog = true"
     />
 
     <q-btn
-      :disable="$store.apikey == ''"
+      :disable="apikey == ''"
       class="full-width constrain-fw"
       size="xl"
       padding="xl xl"
@@ -50,7 +50,7 @@
       </q-banner>
     </div>
 
-    <q-dialog v-model="apikeyAlert">
+    <q-dialog v-model="apikeyDialog">
       <q-card style="min-width: 350px">
         <q-card-section>
           <div class="text-h6">API Key</div>
@@ -60,7 +60,7 @@
           <q-input
             name="apikey_field"
             dense
-            v-model="testInput"
+            v-model="apikey"
             @keyup.enter="updateApikey()"
             autofocus
           />
@@ -88,18 +88,17 @@ export default {
   name: 'PageHome',
   data () {
     return {
-      apikeyAlert: false,
+      apikeyDialog: false,
       // TODO move into gAuth/SignIn and have it update store
       authInProgress: false,
-      testInput: 'AIzaSyD6ai2etV_mA2A-GLmYuM0IuDkpsTsaUXk',
+      apikey: store.apikey,
       $store: store
     }
   },
   methods: {
     updateApikey: function () {
-      this.apikeyAlert = false
-      console.log('update api key: ' + this.testInput)
-      // this.$q.dialog({ message: 'apikey updated' })
+      this.apikeyDialog = false
+      this.$actions.setApikey(this.apikey)
     },
     setAuthStatus: async function () {
       if (this.isSignedIn) {

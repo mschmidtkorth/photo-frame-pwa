@@ -24,3 +24,12 @@ quasar build
 
 ### Customize the configuration
 See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
+
+
+## Carousel tips
+
+To pause when mouse over
+```
+      @mouseenter="autoplay = 0"
+      @mouseleave="autoplay = 8000"
+```

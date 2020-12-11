@@ -31,6 +31,10 @@ function GAuth (gapi) {
   this.gapi = gapi
   this.authInstance = null
   this.setSigninStatus = async function () {
+    if (this.authInstance == null) {
+      store.isSignedIn = false
+      return
+    }
     const user = this.authInstance.currentUser.get()
     store.isSignedIn = user.hasGrantedScopes(SCOPE)
     if (store.isSignedIn) {
@@ -53,6 +57,7 @@ function GAuth (gapi) {
       })
     } catch (e) {
       actions.setApikey('')
+      throw new Error('Invalid apikey.')
     }
 
     this.authInstance = gapi.auth2.getAuthInstance()
@@ -75,7 +80,9 @@ function GAuth (gapi) {
   }
   this.signOut = async function () {
     this.authInstance.signOut()
+    this.authInstance = null
     store.isSignedIn = false
+    store.images = []
   }
 }
 export default boot(async ({ Vue }) => {

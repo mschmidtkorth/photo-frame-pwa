@@ -19,7 +19,7 @@
           name="slideshow"
           icon="panorama"
           label="Slideshow"
-          :disable="!$store.albumLoaded"
+          :disable="!$store.albumLoaded()"
         />
         <q-route-tab to="/" name="settings" icon="settings" label="Settings" />
         <q-route-tab to="/help" name="help" icon="support" label="Help" />

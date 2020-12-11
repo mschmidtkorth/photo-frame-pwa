@@ -68,5 +68,8 @@ const loadImages = async function () {
   console.log(`Found ${store.images.length} images`)
   store.imagesLoading = false
 }
+const shuffleImages = function () {
+  store.images = shuffle(store.images)
+}
 
-export { loadImages }
+export { loadImages, shuffleImages }

@@ -28,7 +28,7 @@
 
     <div class="text-center">
       <q-banner
-        v-show="$store.albumLoaded()"
+        v-show="$store.albumLoaded() && $store.isSignedIn"
         inline-actions
         class="text-white bg-positive"
         animated
@@ -111,6 +111,7 @@ export default {
         } catch (e) {
           this.apikey = ''
           this.$q.dialog({
+            class: 'warning',
             message: 'Invalid Api Key, please set a valid Api Key'
           })
         }

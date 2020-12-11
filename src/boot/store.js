@@ -11,6 +11,9 @@ export const store = Vue.observable({
   authInProgress: false,
   isSignedIn: false,
   apikey: apikey,
+  currentSlideIndex: 1,
+  autoplay: 8000,
+  fullscreen: false,
   albumLoaded: function () {
     return this.images.length > 0
   },

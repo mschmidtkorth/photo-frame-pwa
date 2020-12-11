@@ -13,7 +13,6 @@ export const store = Vue.observable({
   apikey: apikey,
   currentSlideIndex: 1,
   autoplay: 8000,
-  fullscreen: false,
   albumLoaded: function () {
     return this.images.length > 0
   },

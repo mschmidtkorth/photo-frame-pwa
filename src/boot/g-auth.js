@@ -29,7 +29,6 @@ async function initClient (apiKey) {
 
 function GAuth (gapi) {
   this.gapi = gapi
-  this.authInstance = null
   this.setSigninStatus = async function () {
     if (this.authInstance == null) {
       store.isSignedIn = false
@@ -92,8 +91,8 @@ export default boot(async ({ Vue }) => {
     await installClient()
     const gapi = await initClient()
     Vue.prototype.$gAuth = new GAuth(gapi)
+    await Vue.prototype.$gAuth.initClient()
     store.authReady = true
-    console.log('client installed')
   } catch (e) {
     console.log('error loading gAuth: ' + e.message)
   }

@@ -2,8 +2,8 @@
   <div class="">
     <q-carousel
       swipeable
-      v-model="slide"
-      :autoplay="autoplay"
+      v-model="$store.currentSlideIndex"
+      :autoplay="$store.autoplay"
       transition-next="slide-fade"
       transition-prev="slide-fade"
       :fullscreen.sync="fullscreen"
@@ -49,8 +49,8 @@
             dense
             color="grey"
             text-color="white"
-            :icon="autoplay === 0 ? 'play_arrow' : 'pause'"
-            @click="autoplay = autoplay === 0 ? 8000 : 0"
+            :icon="$store.autoplay === 0 ? 'play_arrow' : 'pause'"
+            @click="$store.autoplay = $store.autoplay === 0 ? 8000 : 0"
           />
         </q-carousel-control>
         <q-carousel-control
@@ -82,44 +82,22 @@ export default {
   data () {
     return {
       controlClass: 'hidden',
-      windowHeight: 0
+      windowHeight: 0,
+      fullscreen: false,
+      $store: store
     }
   },
   computed: {
     images () {
+      if (this.$store.albumLoaded()) {
+        this.$q.loading.hide()
+      }
       return this.$store.images
-    },
-    slide: {
-      get () {
-        return store.currentSlideIndex
-      },
-      set (val) {
-        store.currentSlideIndex = val
-      }
-    },
-    fullscreen: {
-      get () {
-        return store.fullscreen
-      },
-      set (val) {
-        store.fullscreen = val
-      }
-    },
-    autoplay: {
-      get () {
-        return store.autoplay
-      },
-      set (val) {
-        store.autoplay = val
-      }
     }
   },
   methods: {
-    touchHover: function () {},
     toggleControlClass: function () {
       this.controlClass = this.controlClass === 'hidden' ? '' : 'hidden'
-      console.log('touch')
-      console.log('slide index: ' + this.slide)
     },
     toggleFullScreen: function () {
       this.fullscreen = !this.fullscreen
@@ -129,14 +107,12 @@ export default {
     },
     shuffleImages: function () {
       shuffleImages()
-      this.slide++
+      this.$store.currentSlideIndex++
     }
   },
   created () {
     this.windowHeight = window.innerHeight - 124 + 'px'
-  },
-  mounted () {
-    console.log('slide index: ' + this.slide)
+    this.$q.loading.show() // hiding in 2s
   }
 }
 </script>

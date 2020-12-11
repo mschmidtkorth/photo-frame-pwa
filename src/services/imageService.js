@@ -51,22 +51,25 @@ const getImages = async function (id) {
 }
 const loadImages = async function () {
   store.imagesLoading = true
-  const albums = await loadAlbums()
-  const result = albums.filter(a => {
-    return a.title === 'PhotoAh'
-  })
-  if (result.length !== 1) {
-    // TODO show user a message about creating album
-    console.log("'Photo Frame' album not found")
-    return
+  try {
+    const albums = await loadAlbums()
+    const result = albums.filter(a => {
+      return a.title === 'PhotoAh'
+    })
+    if (result.length !== 1) {
+      // TODO show user a message about creating album
+      console.log("'Photo Frame' album not found")
+      return
+    }
+    const loadedImages = await getImages(result[0].id)
+    if (loadedImages) {
+      store.images = loadedImages
+    }
+    // self.slick = $('.carousel').slick(self.slickSettings)
+    console.log(`Found ${store.images.length} images`)
+  } finally {
+    store.imagesLoading = false
   }
-  const loadedImages = await getImages(result[0].id)
-  if (loadedImages) {
-    store.images = loadedImages
-  }
-  // self.slick = $('.carousel').slick(self.slickSettings)
-  console.log(`Found ${store.images.length} images`)
-  store.imagesLoading = false
 }
 const shuffleImages = function () {
   store.images = shuffle(store.images)

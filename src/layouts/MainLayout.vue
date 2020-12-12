@@ -9,38 +9,50 @@
     </q-header>
     <q-footer class="bg-white">
       <template>
-        <div v-if="showAppInstallBanner" class="banner-container bg-primary">
-          <div class="constrain-banner">
-            <q-banner dense inline-actions class="bg-primary text-white">
-              <template v-slot:avatar>
-                <q-avatar
-                  name="signal_wifi_off"
-                  color="primary"
-                  icon="system_update"
-                  font-size="22px"
-                />
-              </template>
-              <b>Install PhotoAh?</b>
-              <template v-slot:action>
-                <q-btn
-                  dense
-                  flat
-                  label="Yes"
-                  class="q-px-sm"
-                  @click="installApp"
-                />
-                <q-btn dense flat label="Later" class="q-px-sm" />
-                <q-btn
-                  dense
-                  flat
-                  label="Never"
-                  class="q-px-sm"
-                  @click="neverShowAppInstallBanner"
-                />
-              </template>
-            </q-banner>
+        <transition
+          appear
+          enter-active-class="animated bounceIn"
+          leave-active-class="animated bounceOut"
+        >
+          <div v-if="showAppInstallBanner" class="banner-container bg-primary">
+            <div class="constrain-banner">
+              <q-banner dense inline-actions class="bg-primary text-white">
+                <template v-slot:avatar>
+                  <q-avatar
+                    name="signal_wifi_off"
+                    color="primary"
+                    icon="system_update"
+                    font-size="22px"
+                  />
+                </template>
+                <b>Install PhotoAh?</b>
+                <template v-slot:action>
+                  <q-btn
+                    dense
+                    flat
+                    label="Yes"
+                    class="q-px-sm"
+                    @click="installApp"
+                  />
+                  <q-btn
+                    dense
+                    flat
+                    @click="showAppInstallBanner = false"
+                    label="Later"
+                    class="q-px-sm"
+                  />
+                  <q-btn
+                    dense
+                    flat
+                    label="Never"
+                    class="q-px-sm"
+                    @click="neverShowAppInstallBanner"
+                  />
+                </template>
+              </q-banner>
+            </div>
           </div>
-        </div>
+        </transition>
       </template>
 
       <q-tabs
@@ -50,13 +62,18 @@
         indicator-color="transparent"
       >
         <q-route-tab
-          to="/slideshow"
+          to="/"
           name="slideshow"
           icon="panorama"
           label="Slideshow"
           :disable="!$store.albumLoaded()"
         />
-        <q-route-tab to="/" name="settings" icon="settings" label="Settings" />
+        <q-route-tab
+          to="/settings"
+          name="settings"
+          icon="settings"
+          label="Settings"
+        />
         <q-route-tab to="/help" name="help" icon="support" label="Help" />
       </q-tabs>
     </q-footer>

@@ -8,7 +8,7 @@
       "type": "chrome",
       "request": "attach",
       "name": "Quasar App: chrome",
-      "url": "http://localhost:8080/#/",
+      "url": "http://localhost:8080/#/settings",
       "port": 9222,
       "webRoot": "${workspaceFolder}/src",
       "sourceMapPathOverrides": {

@@ -114,9 +114,24 @@ export default {
     this.windowHeight = window.innerHeight - 124 + 'px'
     this.$q.loading.show() // hiding in 2s
   },
-  mounted () {
+  async mounted () {
     if (!this.$store.authReady || !this.$store.albumLoaded()) {
-      this.$gAuth.initClient()
+      // check for valid api key, if not try to load from url
+      if (!this.$store.validApikey()) {
+        var urlParams = new URLSearchParams(window.location.search)
+        if (urlParams.has('apikey')) {
+          this.$actions.setApikey(urlParams.get('apikey'))
+        }
+      }
+      try {
+        await this.$gAuth.initClient()
+      } catch (e) {
+        console.log('error: ' + e.message)
+      }
+      if (!this.$store.authReady || !this.$store.isSignedIn) {
+        this.$q.loading.hide()
+        this.$router.push({ name: 'Settings' })
+      }
     }
   }
 }

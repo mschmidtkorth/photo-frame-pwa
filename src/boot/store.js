@@ -5,11 +5,11 @@ import { empty } from '../utils/stringUtil'
 const apikey = LocalStorage.getItem('apikey')
 
 export const store = Vue.observable({
-  images: [],
-  imagesLoading: false,
   authReady: false,
   authInProgress: false,
   isSignedIn: false,
+  images: [],
+  imagesLoading: false,
   apikey: apikey,
   currentSlideIndex: 1,
   autoplay: 8000,

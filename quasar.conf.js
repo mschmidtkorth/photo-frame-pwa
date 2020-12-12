@@ -111,7 +111,7 @@ module.exports = function (/* ctx */) {
 
     // animations: 'all', // --- includes all animations
     // https://quasar.dev/options/animations
-    animations: 'all',
+    animations: ['fadeIn', 'fadeOut', 'bounceIn', 'bounceOut'],
 
     // https://quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {
@@ -125,7 +125,8 @@ module.exports = function (/* ctx */) {
       manifest: {
         name: 'PhotoAh',
         short_name: 'PhotoAh',
-        description: 'Invite your friends and family to add photos to your shared Google Photos album, then use this app to play them on your phone/tablet/desktop',
+        description:
+          'Invite your friends and family to add photos to your shared Google Photos album, then use this app to play them on your phone/tablet/desktop',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',

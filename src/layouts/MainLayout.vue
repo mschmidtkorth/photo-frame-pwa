@@ -1,13 +1,48 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header class="bg-white text-grey-10" bordered>
+    <q-header class="bg-primary text-grey-10" bordered>
       <q-toolbar class="constrain">
-        <q-toolbar-title class="text-bold text-fredoka-one">
+        <q-toolbar-title class="text-bold text-fredoka-one text-white">
           Photo<span style="font-style: italic;">Ahhhhh</span>
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
-    <q-footer class="bg-white" bordered>
+    <q-footer class="bg-white">
+      <template>
+        <div v-if="showAppInstallBanner" class="banner-container bg-primary">
+          <div class="constrain-banner">
+            <q-banner dense inline-actions class="bg-primary text-white">
+              <template v-slot:avatar>
+                <q-avatar
+                  name="signal_wifi_off"
+                  color="primary"
+                  icon="system_update"
+                  font-size="22px"
+                />
+              </template>
+              <b>Install PhotoAh?</b>
+              <template v-slot:action>
+                <q-btn
+                  dense
+                  flat
+                  label="Yes"
+                  class="q-px-sm"
+                  @click="installApp"
+                />
+                <q-btn dense flat label="Later" class="q-px-sm" />
+                <q-btn
+                  dense
+                  flat
+                  label="Never"
+                  class="q-px-sm"
+                  @click="neverShowAppInstallBanner"
+                />
+              </template>
+            </q-banner>
+          </div>
+        </div>
+      </template>
+
       <q-tabs
         v-model="tab"
         class="text-grey-10"
@@ -35,12 +70,50 @@
 <script>
 import { store } from '../boot/store'
 
+let deferredPrompt
+
 export default {
   name: 'MainLayout',
   data () {
     return {
       tab: 'settings',
+      showAppInstallBanner: false,
       $store: store
+    }
+  },
+  methods: {
+    installApp () {
+      this.showAppInstallBanner = false
+      // Show the install prompt
+      deferredPrompt.prompt()
+      // Wait for the user to respond to the prompt
+      deferredPrompt.userChoice.then(choiceResult => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt')
+          this.neverShowAppInstallBanner()
+        } else {
+          console.log('User dismissed the install prompt')
+        }
+      })
+    },
+    neverShowAppInstallBanner () {
+      this.showAppInstallBanner = false
+      this.$q.localStorage.set('neverShowInstall', true)
+    }
+  },
+  mounted () {
+    const neverShowInstall = this.$q.localStorage.getItem('neverShowInstall')
+    if (!neverShowInstall) {
+      window.addEventListener('beforeinstallprompt', e => {
+        // Prevent the mini-infobar from appearing on mobile
+        e.preventDefault()
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e
+        // Update UI notify the user they can install the PWA
+        setTimeout(() => {
+          this.showAppInstallBanner = true
+        }, 3000)
+      })
     }
   }
 }

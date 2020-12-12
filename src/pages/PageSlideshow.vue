@@ -113,6 +113,11 @@ export default {
   created () {
     this.windowHeight = window.innerHeight - 124 + 'px'
     this.$q.loading.show() // hiding in 2s
+  },
+  mounted () {
+    if (!this.$store.authReady || !this.$store.albumLoaded()) {
+      this.$gAuth.initClient()
+    }
   }
 }
 </script>

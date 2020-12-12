@@ -1,18 +1,12 @@
 const routes = [
   {
-    name: 'Home',
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        name: 'Settings',
+        name: 'settings',
         component: () => import('pages/PageHome.vue')
-      },
-      {
-        path: 'settings',
-        name: 'Settings',
-        component: () => import('pages/PageSettings.vue')
       },
       {
         path: 'slideshow',

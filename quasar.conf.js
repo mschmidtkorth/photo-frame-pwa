@@ -123,13 +123,13 @@ module.exports = function (/* ctx */) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: 'Photo Frame',
-        short_name: 'Photo Frame',
-        description: 'Photo Viewer',
+        name: 'PhotoAh',
+        short_name: 'PhotoAh',
+        description: 'Invite your friends and family to add photos to your shared Google Photos album, then use this app to play them on your phone/tablet/desktop',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
-        theme_color: '#027be3',
+        theme_color: '#284D87',
         icons: [
           {
             src: 'icons/icon-128x128.png',

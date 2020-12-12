@@ -4,31 +4,31 @@ import { store, actions } from '../boot/store'
 
 const SCOPE = 'https://www.googleapis.com/auth/photoslibrary.readonly'
 
-function installClient () {
-  const apiUrl = 'https://apis.google.com/js/api.js'
-  return new Promise(resolve => {
-    var script = document.createElement('script')
-    script.src = apiUrl
-    script.onreadystatechange = script.onload = function () {
-      if (!script.readyState || /loaded|complete/.test(script.readyState)) {
-        setTimeout(function () {
-          resolve()
-        }, 500)
+function GAuth (store) {
+  this.store = store
+  this.gapi = null
+  this.installClient = function installClient () {
+    const apiUrl = 'https://apis.google.com/js/api.js'
+    return new Promise(resolve => {
+      var script = document.createElement('script')
+      script.src = apiUrl
+      script.onreadystatechange = script.onload = function () {
+        if (!script.readyState || /loaded|complete/.test(script.readyState)) {
+          setTimeout(function () {
+            resolve()
+          }, 500)
+        }
       }
-    }
-    document.getElementsByTagName('body')[0].appendChild(script)
-  })
-}
-async function initClient (apiKey) {
-  return new Promise((resolve, reject) => {
-    window.gapi.load('client:auth2', () => {
-      resolve(window.gapi)
+      document.getElementsByTagName('body')[0].appendChild(script)
     })
-  })
-}
-
-function GAuth (gapi) {
-  this.gapi = gapi
+  }
+  this.loadGapi = async function () {
+    return new Promise((resolve, reject) => {
+      window.gapi.load('client:auth2', () => {
+        resolve(window.gapi)
+      })
+    })
+  }
   this.setSigninStatus = async function () {
     if (this.authInstance == null) {
       store.isSignedIn = false
@@ -42,10 +42,15 @@ function GAuth (gapi) {
   }
 
   this.initClient = async function () {
+    if (!store.authReady || !window.gapi) {
+      await this.installClient()
+      this.gapi = await this.loadGapi()
+      store.authReady = true
+    }
     const apikey = store.apikey
     if (!store.validApikey()) return
     try {
-      await gapi.client.init({
+      await this.gapi.client.init({
         apiKey: apikey,
         clientId:
           '773738037107-50714q5fdotjmh884clsghir2bljqj4t.apps.googleusercontent.com',
@@ -55,11 +60,12 @@ function GAuth (gapi) {
         scope: SCOPE
       })
     } catch (e) {
+      console.log(e.error.message)
       actions.setApikey('')
       throw new Error('Invalid apikey.')
     }
 
-    this.authInstance = gapi.auth2.getAuthInstance()
+    this.authInstance = this.gapi.auth2.getAuthInstance()
     this.authInstance.isSignedIn.listen(this.setSigninStatus.bind(this))
     this.setSigninStatus()
   }
@@ -85,15 +91,5 @@ function GAuth (gapi) {
   }
 }
 export default boot(async ({ Vue }) => {
-  // something to do
-  // await something()
-  try {
-    await installClient()
-    const gapi = await initClient()
-    Vue.prototype.$gAuth = new GAuth(gapi)
-    await Vue.prototype.$gAuth.initClient()
-    store.authReady = true
-  } catch (e) {
-    console.log('error loading gAuth: ' + e.message)
-  }
+  Vue.prototype.$gAuth = new GAuth(store)
 })

@@ -12,7 +12,7 @@
         <transition
           appear
           enter-active-class="animated bounceIn"
-          leave-active-class="animated bounceOut"
+          leave-active-class="animated fadeOut"
         >
           <div v-if="showAppInstallBanner" class="banner-container bg-primary">
             <div class="constrain-banner">

@@ -5,9 +5,25 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Attach to Brave",
+      "port": 9222,
+      "request": "attach",
+      "type": "chrome",
+      "webRoot": "${workspaceFolder}/src",
+      "url": "http://localhost:8080/#/settings",
+      "sourceMapPathOverrides": {
+        "webpack:///./src/services/*": "${webRoot}/services/*",
+        "webpack:///./src/boot/*": "${webRoot}/boot/*",
+        "webpack:///./*": "${webRoot}/*",
+        "webpack:///src/*": "${webRoot}/*",
+        "webpack:///*": "*",
+        "webpack:///./~/*": "${webRoot}/node_modules/*"
+      }
+    },
+    {
       "type": "chrome",
       "request": "attach",
-      "name": "Quasar App: chrome",
+      "name": "Attach to Chrome",
       "url": "http://localhost:8080/#/settings",
       "port": 9222,
       "webRoot": "${workspaceFolder}/src",

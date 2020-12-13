@@ -8,15 +8,14 @@
   "scripts": {
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
-    "icons": "icongenie g --skip-trim -i icon.png"
+    "icons": "icongenie g --skip-trim -i icon.png",
+    "deploy": "quasar build -m pwa && git add -A && git commit -m 'Deploy' && git push"
   },
   "dependencies": {
     "@quasar/extras": "^1.9.11",
     "axios": "^0.21.0",
     "core-js": "^3.6.5",
-    "jquery": "^3.5.1",
-    "quasar": "^1.14.7",
-    "vuex-pathify": "^1.4.4"
+    "quasar": "^1.14.7"
   },
   "devDependencies": {
     "@quasar/app": "^2.1.11",
@@ -29,7 +28,7 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^6.1.2",
-    "workbox-webpack-plugin": "^5.1.4"
+    "workbox-webpack-plugin": "^6.0.2"
   },
   "browserslist": [
     "last 10 Chrome versions",

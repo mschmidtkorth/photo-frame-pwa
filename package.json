@@ -9,7 +9,9 @@
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
     "icons": "icongenie g --skip-trim -i icon.png",
-    "deploy": "quasar build -m pwa && git add -A && git commit -m 'Deploy' && git push"
+    "build": "quasar build -m pwa && mkdir ./dist/pwa/.well-known",
+    "deploy": "cp ./pwabuilder/assetlinks.json ./dist/pwa/.well-known && cp ./pwabuilder/PhotoAh.apk ./dist/pwa && git add -A && git commit -m 'Deploy' && git push"
+
   },
   "dependencies": {
     "@quasar/extras": "^1.9.11",

@@ -121,6 +121,7 @@ export default {
         var urlParams = new URLSearchParams(window.location.search)
         if (urlParams.has('apikey')) {
           this.$actions.setApikey(urlParams.get('apikey'))
+          window.location.replace(window.location.origin)
         }
       }
       try {

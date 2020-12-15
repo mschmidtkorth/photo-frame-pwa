@@ -28,7 +28,7 @@
 
     <div class="text-center">
       <q-banner
-        v-show="$store.albumLoaded() && $store.isSignedIn"
+        v-show="$store.images.length > 0 && $store.isSignedIn"
         inline-actions
         class="text-white bg-positive"
         animated
@@ -41,17 +41,20 @@
 
       <q-banner
         v-show="
-          $store.isSignedIn &&
-            !$store.albumLoaded() &&
-            !$store.authInProgress &&
-            !$store.imagesLoading
+          !$store.authInProgress &&
+            $store.authReady &&
+            $store.isSignedIn &&
+            !$store.imagesLoading &&
+            $store.images.length === 0
         "
         inline-actions
         class="text-white bg-red"
         animated
       >
-        PhotoAh album not found, please create an album titled "PhotoAh" in your
-        <a href="https://photos.google.com" target="_blank">Google Photos</a>.
+        PhotoAh album not found or it is empty, please create an album titled
+        "PhotoAh" in your
+        <a href="https://photos.google.com" target="_blank">Google Photos</a>
+        and add at least 1 photo.
       </q-banner>
     </div>
 

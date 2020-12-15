@@ -3,7 +3,7 @@
     <q-header class="bg-primary text-grey-10" bordered>
       <q-toolbar class="constrain">
         <q-toolbar-title class="text-bold text-fredoka-one text-white">
-          Photo<span style="font-style: italic;">Ahhhhhzzzzz</span>
+          Photo<span style="font-style: italic;">Ahhhhh</span>
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -66,7 +66,7 @@
           name="slideshow"
           icon="panorama"
           label="Slideshow"
-          :disable="!$store.albumLoaded()"
+          :disable="$store.images.length === 0"
         />
         <q-route-tab
           to="/settings"
@@ -88,7 +88,7 @@
 import { store } from '../boot/store'
 
 let deferredPrompt
-
+let bannerHasBeenShown = false
 export default {
   name: 'MainLayout',
   data () {
@@ -101,6 +101,7 @@ export default {
   methods: {
     installApp () {
       this.showAppInstallBanner = false
+
       // Show the install prompt
       deferredPrompt.prompt()
       // Wait for the user to respond to the prompt
@@ -116,16 +117,50 @@ export default {
     neverShowAppInstallBanner () {
       this.showAppInstallBanner = false
       this.$q.localStorage.set('neverShowInstall', true)
+    },
+    albumMissingCb () {
+      if (this.$router.currentRoute.name !== 'Settings') {
+        this.$router.push({ name: 'Settings' })
+      }
+      this.$q.loading.hide()
     }
   },
-  mounted () {
+  created () {
+    this.$actions.albumMissingCb = this.albumMissingCb
+  },
+  async mounted () {
+    this.interval = setInterval(async () => {
+      // call _loadimages every 30 minutes
+      await this.$actions.loadImages(false)
+    }, 1800000)
+    if (!this.$store.authReady || this.$store.images.length === 0) {
+      // check for valid api key, if not try to load from url
+      if (!this.$store.validApikey()) {
+        var urlParams = new URLSearchParams(window.location.search)
+        if (urlParams.has('apikey')) {
+          this.$actions.setApikey(urlParams.get('apikey'))
+          window.location.replace(window.location.origin)
+        }
+      }
+      try {
+        await this.$gAuth.initClient()
+      } catch (e) {
+        console.log('error: ' + e.message)
+      }
+      if (!this.$store.authReady || !this.$store.isSignedIn) {
+        this.albumMissingCb()
+      }
+    }
     const neverShowInstall = this.$q.localStorage.getItem('neverShowInstall')
     if (!neverShowInstall) {
       window.addEventListener('beforeinstallprompt', e => {
+        if (bannerHasBeenShown === true) return
         // Prevent the mini-infobar from appearing on mobile
         e.preventDefault()
         // Stash the event so it can be triggered later.
         deferredPrompt = e
+        bannerHasBeenShown = true
+
         // Update UI notify the user they can install the PWA
         setTimeout(() => {
           this.showAppInstallBanner = true

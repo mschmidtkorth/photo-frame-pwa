@@ -37,7 +37,7 @@ function GAuth (store) {
     const user = this.authInstance.currentUser.get()
     store.isSignedIn = user.hasGrantedScopes(SCOPE)
     if (store.isSignedIn) {
-      await loadImages()
+      await actions.loadImages(false)
     }
   }
 

@@ -7,18 +7,16 @@
       transition-next="slide-fade"
       transition-prev="slide-fade"
       :fullscreen.sync="fullscreen"
-      @mouseover="controlClass = ''"
-      @mouseleave="controlClass = 'hidden'"
-      @click="toggleControlClass"
       animated
       infinite
       :height="windowHeight"
+      @click="toggleControlClass"
     >
       <q-carousel-slide
         v-for="(img, index) in images"
         :key="index"
         :name="index"
-        :img-src="img"
+        :img-src="img.baseUrl"
       />
       <template v-slot:control>
         <q-carousel-control
@@ -34,7 +32,7 @@
             size="xl"
             text-color="white"
             :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
-            @click="toggleFullScreen"
+            @click.stop="toggleFullScreen"
           />
         </q-carousel-control>
         <q-carousel-control
@@ -69,30 +67,47 @@
             @click="shuffleImages"
           />
         </q-carousel-control>
+        <q-carousel-control position="bottom-left" :offset="[0, 40]">
+          <q-btn
+            push
+            square
+            size="xl"
+            dense
+            :text-color="newImageColor"
+            icon="new_releases"
+            @click.stop="newImagesOnly = !newImagesOnly"
+          />
+        </q-carousel-control>
       </template>
     </q-carousel>
   </div>
 </template>
 
 <script>
-import { store } from '../boot/store'
-import { shuffleImages } from '../services/imageService'
+import { store, actions } from '../boot/store'
 
 export default {
   data () {
     return {
-      controlClass: 'hidden',
+      controlClass: '',
       windowHeight: 0,
       fullscreen: false,
-      $store: store
+      $store: store,
+      interval: null,
+      newImagesOnly: false
     }
   },
   computed: {
     images () {
-      if (this.$store.albumLoaded()) {
+      if (this.$store.images.length > 0) {
         this.$q.loading.hide()
       }
-      return this.$store.images
+      return this.newImagesOnly
+        ? this.$store.images.filter(i => i.new)
+        : this.$store.images
+    },
+    newImageColor () {
+      return this.$store.newImages ? 'warning' : ''
     }
   },
   methods: {
@@ -106,34 +121,12 @@ export default {
       }
     },
     shuffleImages: function () {
-      shuffleImages()
-      this.$store.currentSlideIndex++
+      this.$actions.shuffleImages()
     }
   },
   created () {
     this.windowHeight = window.innerHeight - 124 + 'px'
-    this.$q.loading.show() // hiding in 2s
-  },
-  async mounted () {
-    if (!this.$store.authReady || !this.$store.albumLoaded()) {
-      // check for valid api key, if not try to load from url
-      if (!this.$store.validApikey()) {
-        var urlParams = new URLSearchParams(window.location.search)
-        if (urlParams.has('apikey')) {
-          this.$actions.setApikey(urlParams.get('apikey'))
-          window.location.replace(window.location.origin)
-        }
-      }
-      try {
-        await this.$gAuth.initClient()
-      } catch (e) {
-        console.log('error: ' + e.message)
-      }
-      if (!this.$store.authReady || !this.$store.isSignedIn) {
-        this.$q.loading.hide()
-        this.$router.push({ name: 'Settings' })
-      }
-    }
+    this.$q.loading.show()
   }
 }
 </script>

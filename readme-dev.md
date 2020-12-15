@@ -27,3 +27,15 @@ https://github.com/stefanvanherwijnen/quasar-auth-starter/tree/master/frontend
 
 Web.dev PWA tutorial
 https://web.dev/customize-install/
+
+Storybook:
+https://storybook.js.org/
+
+Dynamic Forms:
+https://levelup.gitconnected.com/add-dynamic-forms-to-your-vue-app-609de4005a2b
+
+Example repos including some dynamic form examples:
+https://github.com/34fame?tab=repositories
+
+History mode on github.io:
+https://dev.to/quasar/publish-your-quasar-spa-on-github-io-with-history-mode-20h2

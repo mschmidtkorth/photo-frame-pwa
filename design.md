@@ -10,7 +10,6 @@ Refresh button that only shows when new don't exist, shows pup up flash message 
 - App saves "read" imageIds in LocalStorage when user marks them as "read"
 
 - If new images exist a push notification is displayed
-- After new image is displayed, it's "viewed" flag is set to true
 - make buttons appear and fade away after 8 seconds
 - only show new image icon when sreen activated (grey) or when new images (warning)
 - clicking when no new will ask to check now

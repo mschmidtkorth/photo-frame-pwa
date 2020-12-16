@@ -42,7 +42,7 @@ module.exports = function (/* ctx */) {
       env: {
         appName: 'PhotoAh'
       },
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       devtool: 'source-map',
 
       // transpile: false,

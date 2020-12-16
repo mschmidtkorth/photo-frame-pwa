@@ -53,7 +53,7 @@
             dark
             color="orange"
             v-model="newImagesOnly"
-            label="Only New"
+            :label="'Only New (' + newImageCt + ')'"
           />
         </q-carousel-control>
 
@@ -155,6 +155,12 @@ export default {
     },
     newImageColor () {
       return this.$store.newImages ? 'warning' : ''
+    },
+    newImageCt () {
+      const images = this.$store.images.filter(i => {
+        return i.new && i.id !== 'no-images'
+      })
+      return images.length
     }
   },
   watch: {
@@ -187,6 +193,10 @@ export default {
     },
     shuffleImages: function () {
       this.$actions.shuffleImages()
+    },
+    onlyNew: function () {
+      this.newImagesOnly = !this.newImagesOnly
+      this.$store.currentSlideIndex = 0
     }
   },
   created () {

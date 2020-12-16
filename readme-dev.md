@@ -6,6 +6,7 @@
 - Don't add scripts to the dom in boot files, it causes problems with PWA detection
 - Workbox is the new way to manage service workers
 - To pick a "natural" color, copy a screen shot and paste into Paint.net and use the color picker
+- show "Waiting for new images..." if new images is on and no images
 
 Dynamic themes:
 https://michaelnthiessen.com/dynamically-add-class-name/

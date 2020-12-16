@@ -10,8 +10,14 @@
       animated
       infinite
       :height="windowHeight"
-      @click="toggleControlClass"
+      @click="showControls"
     >
+      <!-- <img
+        src="images/no-images.png"
+        alt="no-images"
+        class="fit"
+        style="object-fit: cover;"
+      /> -->
       <q-carousel-slide
         v-for="(img, index) in images"
         :key="index"
@@ -21,7 +27,7 @@
       <template v-slot:control>
         <q-carousel-control
           position="bottom-right"
-          :offset="[40, 40]"
+          :offset="[18, 18]"
           :class="controlClass"
         >
           <q-btn
@@ -29,21 +35,37 @@
             square
             dense
             color="grey"
-            size="xl"
+            size="md"
             text-color="white"
             :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
-            @click.stop="toggleFullScreen"
+            @click="toggleFullScreen"
           />
         </q-carousel-control>
         <q-carousel-control
           position="top-right"
+          :offset="[18, 18]"
+          class="text-white rounded-borders"
           :class="controlClass"
-          :offset="[40, 40]"
+          style="background: rgba(0, 0, 0, .3); padding: 4px 8px;"
+        >
+          <q-toggle
+            dense
+            dark
+            color="orange"
+            v-model="newImagesOnly"
+            label="Only New"
+          />
+        </q-carousel-control>
+
+        <q-carousel-control
+          position="top-right"
+          :class="controlClass"
+          :offset="[18, 60]"
         >
           <q-btn
             push
             square
-            size="xl"
+            size="md"
             dense
             color="grey"
             text-color="white"
@@ -54,12 +76,32 @@
         <q-carousel-control
           position="top-right"
           :class="controlClass"
-          :offset="[40, 120]"
+          :offset="[18, 100]"
         >
           <q-btn
             push
             square
-            size="xl"
+            size="md"
+            dense
+            color="grey"
+            text-color="white"
+            :icon="$store.newImages ? 'check' : 'cached'"
+            @click="
+              $store.newImages
+                ? $actions.markImagesRead()
+                : $actions.loadImages(false)
+            "
+          />
+        </q-carousel-control>
+        <q-carousel-control
+          position="top-right"
+          :class="controlClass"
+          :offset="[18, 140]"
+        >
+          <q-btn
+            push
+            square
+            size="md"
             dense
             color="grey"
             text-color="white"
@@ -67,15 +109,14 @@
             @click="shuffleImages"
           />
         </q-carousel-control>
-        <q-carousel-control position="bottom-left" :offset="[0, 40]">
+        <q-carousel-control position="bottom-left" :offset="[0, 18]">
           <q-btn
-            push
             square
-            size="xl"
+            size="md"
             dense
-            :text-color="newImageColor"
+            text-color="warning"
             icon="new_releases"
-            @click.stop="newImagesOnly = !newImagesOnly"
+            :class="{ hidden: !$store.newImages }"
           />
         </q-carousel-control>
       </template>
@@ -85,14 +126,15 @@
 
 <script>
 import { store, actions } from '../boot/store'
-
+let timeout = null
 export default {
   data () {
     return {
-      controlClass: '',
+      controlClass: 'hidden',
       windowHeight: 0,
       fullscreen: false,
       $store: store,
+      $actions: actions,
       interval: null,
       newImagesOnly: false
     }
@@ -102,17 +144,40 @@ export default {
       if (this.$store.images.length > 0) {
         this.$q.loading.hide()
       }
-      return this.newImagesOnly
-        ? this.$store.images.filter(i => i.new)
-        : this.$store.images
+      if (this.newImagesOnly) {
+        const images = this.$store.images.filter(i => i.new)
+        if (images.length === 0) {
+          images.push({ id: 'no-images', baseUrl: 'images/no-images.png' })
+        }
+        return images
+      }
+      return this.$store.images
     },
     newImageColor () {
       return this.$store.newImages ? 'warning' : ''
     }
   },
+  watch: {
+    images: function (val) {
+      if (this.$store.currentSlideIndex > val.length) {
+        this.$store.currentSlideIndex = 0
+      }
+    }
+  },
   methods: {
-    toggleControlClass: function () {
-      this.controlClass = this.controlClass === 'hidden' ? '' : 'hidden'
+    showControls: function () {
+      this.controlClass = ''
+      if (timeout) {
+        clearTimeout(timeout) // cancel the previous timer.
+        timeout = null
+      }
+      timeout = setTimeout(
+        function () {
+          this.controlClass = 'hidden'
+          clearTimeout((this.timeout = null))
+        }.bind(this),
+        4000
+      )
     },
     toggleFullScreen: function () {
       this.fullscreen = !this.fullscreen

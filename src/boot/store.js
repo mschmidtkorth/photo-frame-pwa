@@ -34,7 +34,7 @@ export const actions = {
       }
       return
     }
-    let lsReadImageIds = LocalStorage.getItem('images')
+    let lsReadImageIds = LocalStorage.getItem('readIds')
     lsReadImageIds = lsReadImageIds === null ? [] : lsReadImageIds
 
     // Set the read flag on incoming images
@@ -85,6 +85,15 @@ export const actions = {
       store.newImages = true
       console.log('inserted image')
     }
+  },
+  markImagesRead: function () {
+    // set the current list of imageId{s in localStorage
+    const ids = store.images.map(i => {
+      i.new = false
+      return i.id
+    })
+    LocalStorage.set('readIds', ids)
+    store.newImages = false
   },
   shuffleImages: function () {
     store.images = shuffle(store.images)

@@ -127,7 +127,7 @@ module.exports = function (/* ctx */) {
         short_name: 'PhotoAh',
         description:
           'Invite your friends and family to add photos to your shared Google Photos album, then use this app to play them on your phone/tablet/desktop',
-        display: 'standalone',
+        display: 'fullscreen',
         start_url: '/',
         background_color: '#ffffff',
         theme_color: '#284D87',

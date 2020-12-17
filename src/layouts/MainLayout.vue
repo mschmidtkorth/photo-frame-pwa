@@ -3,7 +3,7 @@
     <q-header class="bg-primary text-grey-10" bordered>
       <q-toolbar class="constrain">
         <q-toolbar-title class="text-bold text-fredoka-one text-white">
-          Photo<span style="font-style: italic;">Ahhhhh</span>
+          Photo<span style="font-style: italic;">Ahhhhhzzz</span>
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -129,6 +129,8 @@ export default {
     this.$actions.albumMissingCb = this.albumMissingCb
   },
   async mounted () {
+    // Object.defineProperty(navigator, 'onLine', { value: false })
+
     this.interval = setInterval(async () => {
       // call _loadimages every 30 minutes
       await this.$actions.loadImages(false)
@@ -147,7 +149,10 @@ export default {
       } catch (e) {
         console.log('error: ' + e.message)
       }
-      if (!this.$store.authReady || !this.$store.isSignedIn) {
+      if (
+        !this.$store.authReady ||
+        (!this.$store.isSignedIn && navigator.onLine)
+      ) {
         this.albumMissingCb()
       }
     }

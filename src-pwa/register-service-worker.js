@@ -12,30 +12,32 @@ register(process.env.SERVICE_WORKER_FILE, {
   // registrationOptions: { scope: './' },
 
   ready (/* registration */) {
-    // console.log('Service worker is active.')
+    console.log('PHSW:Service worker is active.')
   },
 
   registered (/* registration */) {
-    // console.log('Service worker has been registered.')
+    console.log('PHSW:Service worker has been registered.')
   },
 
   cached (/* registration */) {
-    // console.log('Content has been cached for offline use.')
+    console.log('PHSW:Content has been cached for offline use.')
   },
 
   updatefound (/* registration */) {
-    // console.log('New content is downloading.')
+    console.log('PHSW:New content is downloading.')
   },
 
   updated (/* registration */) {
-    // console.log('New content is available; please refresh.')
+    console.log('PHSW:New content is available; please refresh.')
   },
 
   offline () {
-    // console.log('No internet connection found. App is running in offline mode.')
+    console.log(
+      'PHSW:No internet connection found. App is running in offline mode.'
+    )
   },
 
-  error (/* err */) {
-    // console.error('Error during service worker registration:', err)
+  error (err) {
+    console.error('PHSW:Error during service worker registration:', err)
   }
 })

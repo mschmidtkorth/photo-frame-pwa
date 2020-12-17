@@ -7,6 +7,11 @@
 - Workbox is the new way to manage service workers
 - To pick a "natural" color, copy a screen shot and paste into Paint.net and use the color picker
 - show "Waiting for new images..." if new images is on and no images
+- use FileReader to convert bytes to base 64 encodeed
+-
+
+Danny's links:
+http://dconnell.co.uk/#/resource/vscode
 
 Dynamic themes:
 https://michaelnthiessen.com/dynamically-add-class-name/

@@ -98,6 +98,7 @@ export const actions = {
   shuffleImages: function () {
     store.images = shuffle(store.images)
     store.currentSlideIndex++
+    store.currentSlideIndex--
   },
   loadImages: async function (background) {
     store.imagesLoading = !background

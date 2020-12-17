@@ -33,6 +33,8 @@ registerRoute(
   new NetworkOnly()
 )
 
+// TODO add networkonly for album apis
+
 registerRoute(
   ({ url }) => url.host.startsWith('fonts.g'),
   new CacheFirst({

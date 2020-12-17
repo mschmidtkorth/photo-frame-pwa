@@ -127,6 +127,25 @@
 <script>
 import { store, actions } from '../boot/store'
 let timeout = null
+let wakeLock = null
+
+const requestWakeLock = async () => {
+  try {
+    wakeLock = await navigator.wakeLock.request('screen')
+    wakeLock.addEventListener('release', () => {
+      console.log('Screen Wake Lock released:', wakeLock.released)
+    })
+    console.log('Screen Wake Lock released:', wakeLock.released)
+  } catch (err) {
+    console.error(`${err.name}, ${err.message}`)
+  }
+}
+const handleVisibilityChange = async () => {
+  if (wakeLock !== null && document.visibilityState === 'visible') {
+    await requestWakeLock()
+  }
+}
+document.addEventListener('visibilitychange', handleVisibilityChange)
 export default {
   data () {
     return {
@@ -199,9 +218,21 @@ export default {
       this.$store.currentSlideIndex = 0
     }
   },
-  created () {
+  async created () {
     this.windowHeight = window.innerHeight - 124 + 'px'
     this.$q.loading.show()
+    if ('wakeLock' in navigator) {
+      await requestWakeLock()
+    } else {
+      alert('Wake lock not supported')
+      console.log('wakelock:', 'wakeLock' in navigator)
+    }
+  },
+  async beforeDestroy () {
+    if ('wakeLock' in navigator) {
+      wakeLock.release()
+      // wakeLock = null
+    }
   }
 }
 </script>

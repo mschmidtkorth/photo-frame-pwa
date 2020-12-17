@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Photo Frame</string>
+    <string name="title_activity_main">Photo Frame</string>
+    <string name="package_name">photoah.capacitor.app.quasar</string>
+    <string name="custom_url_scheme">photoah.capacitor.app.quasar</string>
+</resources>

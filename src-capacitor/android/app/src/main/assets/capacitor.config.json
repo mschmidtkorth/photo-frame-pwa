@@ -1,0 +1,7 @@
+{
+  "appId": "photoah.capacitor.app.quasar",
+  "appName": "Photo Frame",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www"
+}

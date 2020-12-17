@@ -1,0 +1,12 @@
+{
+  "name": "photo-frame-pwa",
+  "version": "0.0.1",
+  "description": "Photo Viewer",
+  "author": "Charlie Knoll <charlie.knoll@gmail.com>",
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "^2.4.5",
+    "@capacitor/cli": "^2.0.0",
+    "@capacitor/core": "^2.0.0"
+  }
+}

@@ -224,7 +224,7 @@ export default {
     if ('wakeLock' in navigator) {
       await requestWakeLock()
     } else {
-      alert('Wake lock not supported')
+      // alert('Wake lock not supported')
       console.log('wakelock:', 'wakeLock' in navigator)
     }
   },

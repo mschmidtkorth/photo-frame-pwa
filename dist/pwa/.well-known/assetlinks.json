@@ -1,5 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target" : { "namespace": "android_app", "package_name": "app.netlify.amazing_kalam_339796.twa",
-                   "sha256_cert_fingerprints": ["94:92:EC:B1:7B:37:38:83:CB:70:2F:C6:11:F8:AD:7A:CB:F4:98:1F:6C:D6:EA:96:54:7A:39:A3:12:64:78:70"] }
-    }]

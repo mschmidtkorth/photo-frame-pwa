@@ -128,8 +128,10 @@ module.exports = function (/* ctx */) {
         description:
           'Invite your friends and family to add photos to your shared Google Photos album, then use this app to play them on your phone/tablet/desktop',
         display: 'standalone',
+        start_url: '/',
         background_color: '#ffffff',
         theme_color: '#284D87',
+
         icons: [
           {
             src: 'icons/icon-128x128.png',
@@ -156,7 +158,17 @@ module.exports = function (/* ctx */) {
             sizes: '512x512',
             type: 'image/png'
           }
-        ]
+        ],
+        screenshots: [
+          {
+            src: 'images/screenshots/screen.png'
+          },
+          {
+            src: 'imagees/screenshots/screen.png'
+          }
+        ],
+        features: ['Cross Platform', 'fast', 'simple'],
+        categories: ['photos', 'Google']
       }
     },
 

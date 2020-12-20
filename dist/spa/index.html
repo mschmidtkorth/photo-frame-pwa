@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <title><%= productName %></title>
+<head><base href="/">
+  <title>Photo Frame</title>
 
   <meta charset="utf-8">
-  <meta name="description" content="<%= productDescription %>">
+  <meta name="description" content="Photo Viewer">
   <meta name="format-detection" content="telephone=no">
   <meta name="msapplication-tap-highlight" content="no">
   <meta name="viewport"
-    content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>">
+    content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 
   <link rel="icon" type="image/png" sizes="128x128" href="icons/favicon-128x128.png">
   <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png">
@@ -28,19 +28,18 @@
     // For example, get the cached content and update
     // the content on the page.
     console.log('PHSW:updatedurl: ' + updatedUrl)
-    debugger
     // const cache = await caches.open(cacheName);
     // const updatedResponse = await cache.match(updatedUrl);
     // const updatedText = await updatedResponse.text();
   }
 });
 </script>
-</head>
+<link href="/css/vendor.1b36357a.css" rel="stylesheet"><link href="/css/app.b93c0162.css" rel="stylesheet"></head>
 
 <body>
   <!-- DO NOT touch the following DIV -->
   <div id="q-app"></div>
 
-</body>
+<script src="/js/vendor.601b98ed.js"></script><script src="/js/app.44cda97e.js"></script></body>
 
 </html>

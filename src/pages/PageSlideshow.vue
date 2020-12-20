@@ -27,7 +27,7 @@
       <template v-slot:control>
         <q-carousel-control
           position="bottom-right"
-          :offset="[18, 18]"
+          :offset="[60, 60]"
           :class="controlClass"
         >
           <q-btn
@@ -35,7 +35,7 @@
             square
             dense
             color="grey"
-            size="md"
+            size="xl"
             text-color="white"
             :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
             @click="toggleFullScreen"
@@ -43,7 +43,7 @@
         </q-carousel-control>
         <q-carousel-control
           position="top-right"
-          :offset="[18, 18]"
+          :offset="[160, 60]"
           class="text-white rounded-borders"
           :class="controlClass"
           style="background: rgba(0, 0, 0, .3); padding: 4px 8px;"
@@ -60,12 +60,12 @@
         <q-carousel-control
           position="top-right"
           :class="controlClass"
-          :offset="[18, 60]"
+          :offset="[60, 60]"
         >
           <q-btn
             push
             square
-            size="md"
+            size="xl"
             dense
             color="grey"
             text-color="white"
@@ -76,12 +76,12 @@
         <q-carousel-control
           position="top-right"
           :class="controlClass"
-          :offset="[18, 100]"
+          :offset="[60, 140]"
         >
           <q-btn
             push
             square
-            size="md"
+            size="xl"
             dense
             color="grey"
             text-color="white"
@@ -96,12 +96,12 @@
         <q-carousel-control
           position="top-right"
           :class="controlClass"
-          :offset="[18, 140]"
+          :offset="[60, 220]"
         >
           <q-btn
             push
             square
-            size="md"
+            size="xl"
             dense
             color="grey"
             text-color="white"

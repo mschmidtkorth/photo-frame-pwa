@@ -7,9 +7,9 @@
 /*
   dependencies
 */
-
-import { precacheAndRoute } from 'workbox-precaching'
-import { registerRoute } from 'workbox-routing'
+import { BroadcastUpdatePlugin } from 'workbox-broadcast-update'
+import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching'
+import { NavigationRoute, registerRoute } from 'workbox-routing'
 import {
   StaleWhileRevalidate,
   CacheFirst,
@@ -21,8 +21,18 @@ import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 /*
   config
 */
-
+// self.__WB_DISABLE_DEV_LOGS = true
 precacheAndRoute(self.__WB_MANIFEST)
+
+const handler = createHandlerBoundToURL('/index.html')
+const navigationRoute = new NavigationRoute(handler)
+registerRoute(navigationRoute)
+
+// self.addEventListener('message', event => {
+//   if (event.data && event.data.type === 'SKIP_WAITING') {
+//     self.skipWaiting()
+//   }
+// })
 
 /*
 caching strategies
@@ -52,5 +62,7 @@ registerRoute(
 
 registerRoute(
   ({ url }) => url.href.startsWith('http'),
-  new StaleWhileRevalidate()
+  new StaleWhileRevalidate({
+    plugins: [new BroadcastUpdatePlugin()]
+  })
 )

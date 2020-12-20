@@ -3,7 +3,7 @@
     <q-header class="bg-primary text-grey-10" bordered>
       <q-toolbar class="constrain">
         <q-toolbar-title class="text-bold text-fredoka-one text-white">
-          Photo<span style="font-style: italic;">Ahhhhhyyy</span>
+          Photo<span style="font-style: italic;">Ahhhhh</span>
         </q-toolbar-title>
       </q-toolbar>
     </q-header>

@@ -26,8 +26,8 @@
       />
       <template v-slot:control>
         <q-carousel-control
-          position="bottom-right"
-          :offset="[60, 60]"
+          position="top-right"
+          :offset="[60, 300]"
           :class="controlClass"
         >
           <q-btn
@@ -46,7 +46,7 @@
           :offset="[160, 60]"
           class="text-white rounded-borders"
           :class="controlClass"
-          style="background: rgba(0, 0, 0, .3); padding: 4px 8px;"
+          style="background: rgba(0, 0, 0, .3); padding: 4px 8px; font-size: 24px"
         >
           <q-toggle
             dense

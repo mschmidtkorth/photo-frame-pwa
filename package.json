@@ -1,6 +1,6 @@
 {
   "name": "photo-frame-pwa",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Photo Viewer",
   "productName": "Photo Frame",
   "author": "Charlie Knoll <charlie.knoll@gmail.com>",
@@ -12,7 +12,7 @@
     "build": "quasar build -m pwa && mkdirp ./dist/pwa/.well-known && cp ./pwabuilder/assetlinks.json ./dist/pwa/.well-known && cp ./pwabuilder/PhotoAh.apk ./dist/pwa && git add -A && git commit -m 'Deploy' && git push",
     "deploy": "mkdirp ./dist/pwa/.well-known",
     "deploy2": "cp ./pwabuilder/assetlinks.json ./dist/pwa/.well-known && cp ./pwabuilder/PhotoAh.apk ./dist/pwa && git add -A && git commit -m 'Deploy' && git push",
-    "build-debug": "npm version patch && quasar build -d -m pwa",
+    "build-debug": "npm version patch --force && quasar build -d -m pwa",
     "serve-debug": "quasar serve ./dist/pwa -p 8081 -H localhost --history"
   },
   "dependencies": {

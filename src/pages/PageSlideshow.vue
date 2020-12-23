@@ -242,6 +242,7 @@ export default {
       console.log('wakelock:', 'wakeLock' in navigator)
     }
     updateTimeout = setInterval(function () {
+      console.log('registration: ', store.registration)
       if (store.registration && !store.registration.waiting) {
         store.registration.update()
       }

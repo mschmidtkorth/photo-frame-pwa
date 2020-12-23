@@ -18,6 +18,7 @@ export const store = Vue.observable({
   newImages: false,
   showAppUpdatedBanner: false,
   registration: null,
+  appName: process.env.appName,
 
   validApikey: function () {
     return !empty(this.apikey)

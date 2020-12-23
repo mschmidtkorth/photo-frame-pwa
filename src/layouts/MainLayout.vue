@@ -3,99 +3,14 @@
     <q-header class="bg-primary text-grey-10" bordered>
       <q-toolbar class="constrain">
         <q-toolbar-title class="text-bold text-fredoka-one text-white">
-          Photo<span style="font-style: italic;">Ahhhhh v{{ version }}</span>
+          {{ this.$store.appName
+          }}<span style="font-style: italic;">hhh</span> v{{ version }}
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
     <q-footer class="bg-white">
-      <template>
-        <transition
-          appear
-          enter-active-class="animated bounceIn"
-          leave-active-class="animated fadeOut"
-        >
-          <div v-if="showAppInstallBanner" class="banner-container bg-primary">
-            <div class="constrain-banner">
-              <q-banner dense inline-actions class="bg-primary text-white">
-                <template v-slot:avatar>
-                  <q-avatar
-                    name="signal_wifi_off"
-                    color="primary"
-                    icon="system_update"
-                    font-size="22px"
-                  />
-                </template>
-                <b>Install PhotoAh?</b>
-                <template v-slot:action>
-                  <q-btn
-                    dense
-                    flat
-                    label="Yes"
-                    class="q-px-sm"
-                    @click="installApp"
-                  />
-                  <q-btn
-                    dense
-                    flat
-                    @click="showAppInstallBanner = false"
-                    label="Later"
-                    class="q-px-sm"
-                  />
-                  <q-btn
-                    dense
-                    flat
-                    label="Never"
-                    class="q-px-sm"
-                    @click="neverShowAppInstallBanner"
-                  />
-                </template>
-              </q-banner>
-            </div>
-          </div>
-        </transition>
-      </template>
-      <template>
-        <transition
-          appear
-          enter-active-class="animated bounceIn"
-          leave-active-class="animated fadeOut"
-        >
-          <div
-            v-if="this.$store.showAppUpdatedBanner"
-            class="banner-container bg-primary"
-          >
-            <div class="constrain-banner">
-              <q-banner dense inline-actions class="bg-primary text-white">
-                <template v-slot:avatar>
-                  <q-avatar
-                    name="signal_wifi_off"
-                    color="primary"
-                    icon="system_update"
-                    font-size="22px"
-                  />
-                </template>
-                <b>PhotoAh has an update pending, update now?</b>
-                <template v-slot:action>
-                  <q-btn
-                    dense
-                    flat
-                    label="Yes"
-                    class="q-px-sm"
-                    @click="updateApp(true)"
-                  />
-                  <q-btn
-                    dense
-                    flat
-                    label="No"
-                    class="q-px-sm"
-                    @click="updateApp(false)"
-                  />
-                </template>
-              </q-banner>
-            </div>
-          </div>
-        </transition>
-      </template>
+      <app-install-banner></app-install-banner>
+      <app-update-banner></app-update-banner>
       <q-tabs
         v-model="tab"
         class="text-grey-10"
@@ -127,10 +42,9 @@
 
 <script>
 import { store } from '../boot/store'
+import AppUpdateBanner from 'src/components/AppUpdateBanner.vue'
+import AppInstallBanner from 'src/components/AppInstallBanner.vue'
 
-let deferredPrompt
-let bannerHasBeenShown = false
-let refreshing = false
 export default {
   name: 'MainLayout',
   data () {
@@ -141,37 +55,11 @@ export default {
       $store: store
     }
   },
+  components: {
+    AppUpdateBanner,
+    AppInstallBanner
+  },
   methods: {
-    installApp () {
-      this.showAppInstallBanner = false
-
-      // Show the install prompt
-      deferredPrompt.prompt()
-      // Wait for the user to respond to the prompt
-      deferredPrompt.userChoice.then(choiceResult => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt')
-          this.neverShowAppInstallBanner()
-        } else {
-          console.log('User dismissed the install prompt')
-        }
-      })
-    },
-    neverShowAppInstallBanner () {
-      this.showAppInstallBanner = false
-      this.$q.localStorage.set('neverShowInstall', true)
-    },
-    updateApp (yes) {
-      this.$store.showAppUpdatedBanner = false
-      if (!yes || refreshing) {
-        return
-      }
-      refreshing = true
-      if (store.registration && store.registration.waiting) {
-        store.registration.waiting.postMessage({ type: 'SKIP_WAITING' })
-      }
-      window.location.reload()
-    },
     albumMissingCb () {
       if (this.$router.currentRoute.name !== 'Settings') {
         this.$router.push({ name: 'Settings' })
@@ -181,13 +69,10 @@ export default {
   },
   created () {
     this.$actions.albumMissingCb = this.albumMissingCb
-    console.log('process.env: ', process.env.VERSION)
+    // console.log('process.env: ', process.env.VERSION)
   },
   async mounted () {
-    // Object.defineProperty(navigator, 'onLine', { value: false })
-
     this.interval = setInterval(async () => {
-      // call _loadimages every 30 minutes
       await this.$actions.loadImages(false)
     }, 1800000)
     if (!this.$store.authReady || this.$store.images.length === 0) {
@@ -210,22 +95,6 @@ export default {
       ) {
         this.albumMissingCb()
       }
-    }
-    const neverShowInstall = this.$q.localStorage.getItem('neverShowInstall')
-    if (!neverShowInstall) {
-      window.addEventListener('beforeinstallprompt', e => {
-        if (bannerHasBeenShown === true) return
-        // Prevent the mini-infobar from appearing on mobile
-        e.preventDefault()
-        // Stash the event so it can be triggered later.
-        deferredPrompt = e
-        bannerHasBeenShown = true
-
-        // Update UI notify the user they can install the PWA
-        setTimeout(() => {
-          this.showAppInstallBanner = true
-        }, 3000)
-      })
     }
   }
 }

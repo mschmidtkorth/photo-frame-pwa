@@ -20,7 +20,9 @@
       rounded
       :icon="$store.isSignedIn ? 'check' : 'warning'"
       :label="
-        $store.isSignedIn ? 'Granted Photoah Access' : 'Authorize PhotoAh'
+        $store.isSignedIn
+          ? `Granted ${$store.appName} Access`
+          : `Authorize ${$store.appName}`
       "
       @click="setAuthStatus"
       :loading="$store.authInProgress"

@@ -10,7 +10,7 @@
       "request": "attach",
       "type": "chrome",
       "webRoot": "${workspaceFolder}/src",
-      "url": "http://localhost:8080/",
+      "url": "http://localhost:8080/settings",
       "sourceMapPathOverrides": {
         "webpack:///./src/services/*": "${webRoot}/services/*",
         "webpack:///./src/boot/*": "${webRoot}/boot/*",

@@ -16,6 +16,9 @@ export const store = Vue.observable({
   currentSlideIndex: 1,
   autoplay: 8000,
   newImages: false,
+  showAppUpdatedBanner: false,
+  registration: null,
+
   validApikey: function () {
     return !empty(this.apikey)
   }

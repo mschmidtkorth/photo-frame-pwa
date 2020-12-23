@@ -126,7 +126,10 @@
 
 <script>
 import { store, actions } from '../boot/store'
+import axios from 'axios'
+
 let timeout = null
+let updateTimeout = null
 let wakeLock = null
 
 const requestWakeLock = async () => {
@@ -143,6 +146,9 @@ const requestWakeLock = async () => {
 const handleVisibilityChange = async () => {
   if (wakeLock !== null && document.visibilityState === 'visible') {
     await requestWakeLock()
+    if (store.registration && !store.registration.waiting) {
+      store.registration.update()
+    }
   }
 }
 document.addEventListener('visibilitychange', handleVisibilityChange)
@@ -172,6 +178,9 @@ export default {
       }
       return this.$store.images
     },
+    allowFullScreen () {
+      return this.fullscreen && !this.$store.showAppUpdatedBanner
+    },
     newImageColor () {
       return this.$store.newImages ? 'warning' : ''
     },
@@ -187,6 +196,11 @@ export default {
       if (this.$store.currentSlideIndex > val.length) {
         this.$store.currentSlideIndex = 0
       }
+    },
+    allowFullScreen: function (val) {
+      if (!val && this.fullscreen) {
+        this.toggleFullScreen()
+      }
     }
   },
   methods: {
@@ -201,7 +215,7 @@ export default {
           this.controlClass = 'hidden'
           clearTimeout((this.timeout = null))
         }.bind(this),
-        4000
+        5000
       )
     },
     toggleFullScreen: function () {
@@ -227,11 +241,19 @@ export default {
       // alert('Wake lock not supported')
       console.log('wakelock:', 'wakeLock' in navigator)
     }
+    updateTimeout = setInterval(function () {
+      if (store.registration && !store.registration.waiting) {
+        store.registration.update()
+      }
+    }, 1000 * 60)
   },
   async beforeDestroy () {
     if ('wakeLock' in navigator) {
       wakeLock.release()
       // wakeLock = null
+    }
+    if (updateTimeout) {
+      clearInterval(updateTimeout)
     }
   }
 }

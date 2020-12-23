@@ -6,6 +6,8 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 /* eslint-env node */
+const configuration = require('./package.json')
+const VERSION = configuration.version
 
 module.exports = function (/* ctx */) {
   return {
@@ -40,7 +42,8 @@ module.exports = function (/* ctx */) {
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       env: {
-        appName: 'PhotoAh'
+        appName: 'PhotoAh',
+        VERSION: VERSION
       },
       vueRouterMode: 'history', // available values: 'hash', 'history'
       devtool: 'source-map',

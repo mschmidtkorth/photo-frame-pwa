@@ -3,7 +3,7 @@
     <q-header class="bg-primary text-grey-10" bordered>
       <q-toolbar class="constrain">
         <q-toolbar-title class="text-bold text-fredoka-one text-white">
-          Photo<span style="font-style: italic;">Ahhhhh</span>
+          Photo<span style="font-style: italic;">Ahhhhh v{{ version }}</span>
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -54,7 +54,48 @@
           </div>
         </transition>
       </template>
-
+      <template>
+        <transition
+          appear
+          enter-active-class="animated bounceIn"
+          leave-active-class="animated fadeOut"
+        >
+          <div
+            v-if="this.$store.showAppUpdatedBanner"
+            class="banner-container bg-primary"
+          >
+            <div class="constrain-banner">
+              <q-banner dense inline-actions class="bg-primary text-white">
+                <template v-slot:avatar>
+                  <q-avatar
+                    name="signal_wifi_off"
+                    color="primary"
+                    icon="system_update"
+                    font-size="22px"
+                  />
+                </template>
+                <b>PhotoAh has an update pending, update now?</b>
+                <template v-slot:action>
+                  <q-btn
+                    dense
+                    flat
+                    label="Yes"
+                    class="q-px-sm"
+                    @click="updateApp(true)"
+                  />
+                  <q-btn
+                    dense
+                    flat
+                    label="No"
+                    class="q-px-sm"
+                    @click="updateApp(false)"
+                  />
+                </template>
+              </q-banner>
+            </div>
+          </div>
+        </transition>
+      </template>
       <q-tabs
         v-model="tab"
         class="text-grey-10"
@@ -89,12 +130,14 @@ import { store } from '../boot/store'
 
 let deferredPrompt
 let bannerHasBeenShown = false
+let refreshing = false
 export default {
   name: 'MainLayout',
   data () {
     return {
       tab: 'settings',
       showAppInstallBanner: false,
+      version: process.env.VERSION,
       $store: store
     }
   },
@@ -118,6 +161,17 @@ export default {
       this.showAppInstallBanner = false
       this.$q.localStorage.set('neverShowInstall', true)
     },
+    updateApp (yes) {
+      this.$store.showAppUpdatedBanner = false
+      if (!yes || refreshing) {
+        return
+      }
+      refreshing = true
+      if (store.registration && store.registration.waiting) {
+        store.registration.waiting.postMessage({ type: 'SKIP_WAITING' })
+      }
+      window.location.reload()
+    },
     albumMissingCb () {
       if (this.$router.currentRoute.name !== 'Settings') {
         this.$router.push({ name: 'Settings' })
@@ -127,6 +181,7 @@ export default {
   },
   created () {
     this.$actions.albumMissingCb = this.albumMissingCb
+    console.log('process.env: ', process.env.VERSION)
   },
   async mounted () {
     // Object.defineProperty(navigator, 'onLine', { value: false })

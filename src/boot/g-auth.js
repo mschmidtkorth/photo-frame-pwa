@@ -60,9 +60,9 @@ function GAuth (store) {
         scope: SCOPE
       })
     } catch (e) {
-      console.log(e.error.message)
-      actions.setApikey('')
-      throw new Error('Invalid apikey.')
+      console.log('authorization error: ', e)
+      // actions.setApikey('')
+      // throw new Error('Invalid apikey.')
     }
 
     this.authInstance = this.gapi.auth2.getAuthInstance()

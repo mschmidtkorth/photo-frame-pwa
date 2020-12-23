@@ -112,6 +112,7 @@ export default {
         try {
           await this.$gAuth.signIn()
         } catch (e) {
+          console.log('error: ', e)
           this.apikey = ''
           this.$q.dialog({
             class: 'warning',

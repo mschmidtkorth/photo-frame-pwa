@@ -1,13 +1,5 @@
-[
-  {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.photoah.twa",
-      "sha256_cert_fingerprints": [
-        "13:C8:53:BE:4C:D2:2A:6E:D2:3F:2E:84:11:CE:23:55:20:1E:04:FD:85:E3:E8:FC:9B:6B:A3:AD:11:34:99:AB",
-        "17:37:55:CE:BF:3F:95:F9:5F:1A:02:46:3C:09:A7:F3:48:DE:49:6A:7E:8E:FD:C2:2C:7F:9B:D8:24:74:A0:C7"
-      ]
-    }
-  }
-]
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target" : { "namespace": "android_app", "package_name": "com.photoah.twa",
+                   "sha256_cert_fingerprints": ["13:C8:53:BE:4C:D2:2A:6E:D2:3F:2E:84:11:CE:23:55:20:1E:04:FD:85:E3:E8:FC:9B:6B:A3:AD:11:34:99:AB"] }
+    }]

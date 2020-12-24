@@ -45,10 +45,10 @@ const getImages = async function (id) {
   }
   return images
 }
-const loadImages = async function () {
+const loadImages = async function (albumTitle) {
   const albums = await loadAlbums()
   const result = albums.filter(a => {
-    return a.title === 'PhotoAh'
+    return a.title === albumTitle
   })
   if (result.length !== 1) {
     // TODO show user a message about creating album

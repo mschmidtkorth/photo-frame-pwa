@@ -3,7 +3,7 @@
     <q-carousel
       swipeable
       v-model="$store.currentSlideIndex"
-      :autoplay="$store.autoplay"
+      :autoplay="$store.autoplay ? parseInt($store.slideSpeed) * 1000 : 0"
       transition-next="slide-fade"
       transition-prev="slide-fade"
       :fullscreen.sync="fullscreen"
@@ -69,8 +69,8 @@
             dense
             color="grey"
             text-color="white"
-            :icon="$store.autoplay === 0 ? 'play_arrow' : 'pause'"
-            @click="$store.autoplay = $store.autoplay === 0 ? 8000 : 0"
+            :icon="$store.autoplay ? 'pause' : 'play_arrow'"
+            @click="$store.autoplay = !$store.autoplay"
           />
         </q-carousel-control>
         <q-carousel-control
@@ -125,7 +125,8 @@
 </template>
 
 <script>
-import { store, actions } from '../boot/store'
+import { store } from '../boot/store'
+import { actions } from '../boot/actions'
 import axios from 'axios'
 
 let timeout = null

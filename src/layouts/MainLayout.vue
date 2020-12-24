@@ -1,11 +1,11 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header class="bg-primary text-grey-10" bordered>
-      <q-toolbar class="constrain">
-        <q-toolbar-title class="text-bold text-fredoka-one text-white">
-          {{ this.$store.appName
-          }}<span style="font-style: italic;">hhh</span> v{{ version }}
+    <q-header class="bg-primary">
+      <q-toolbar class="constrain text-white">
+        <q-toolbar-title class="text-bold text-fredoka-one">
+          {{ this.$store.appName }}
         </q-toolbar-title>
+        <div>v{{ version }}</div>
       </q-toolbar>
     </q-header>
     <q-footer class="bg-white">
@@ -30,7 +30,7 @@
           icon="settings"
           label="Settings"
         />
-        <q-route-tab to="/help" name="help" icon="support" label="Help" />
+        <q-route-tab to="/help" name="help" icon="help" label="Help" />
       </q-tabs>
     </q-footer>
 

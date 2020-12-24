@@ -1,6 +1,6 @@
 import { boot } from 'quasar/wrappers'
-import { loadImages } from './../services/imageService'
-import { store, actions } from '../boot/store'
+import { store } from '../boot/store'
+import { actions } from '../boot/actions'
 
 const SCOPE = 'https://www.googleapis.com/auth/photoslibrary.readonly'
 
@@ -78,6 +78,9 @@ function GAuth (store) {
       }
       if (!this.authInstance.isSignedIn.get()) {
         await this.authInstance.signIn()
+      } else {
+        // handle album change
+        await this.setSigninStatus()
       }
     } finally {
       store.authInProgress = false

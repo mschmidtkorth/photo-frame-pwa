@@ -77,13 +77,13 @@ export default {
     }, 1800000)
     if (!this.$store.authReady || this.$store.images.length === 0) {
       // check for valid api key, if not try to load from url
-      if (!this.$store.validApikey()) {
-        var urlParams = new URLSearchParams(window.location.search)
-        if (urlParams.has('apikey')) {
-          this.$actions.setApikey(urlParams.get('apikey'))
-          window.location.replace(window.location.origin)
-        }
+
+      var urlParams = new URLSearchParams(window.location.search)
+      if (urlParams.has('apikey')) {
+        this.$actions.setLocalStorage('apikey', urlParams.get('apikey'))
+        window.location.replace(window.location.origin)
       }
+
       try {
         await this.$gAuth.initClient()
       } catch (e) {

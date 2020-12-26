@@ -14,7 +14,8 @@
         filled
         type="number"
         v-model="slideSpeed"
-        label="Slide duration in seconds (default: 8)"
+        label="Slide duration in seconds"
+        hint="default: 8 seconds"
         lazy-rules
         :rules="[
           val =>

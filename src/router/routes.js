@@ -12,6 +12,11 @@ const routes = [
         path: '',
         name: 'Slideshow',
         component: () => import('pages/PageSlideshow.vue')
+      },
+      {
+        path: 'help',
+        name: 'Help',
+        component: () => import('pages/PageHelp.vue')
       }
     ]
   },

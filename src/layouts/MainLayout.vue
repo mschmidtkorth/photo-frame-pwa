@@ -90,8 +90,8 @@ export default {
         console.log('error: ' + e.message)
       }
       if (
-        !this.$store.authReady ||
-        (!this.$store.isSignedIn && navigator.onLine)
+        (!this.$store.authReady || !this.$store.isSignedIn) &&
+        (navigator.onLine || this.$store.images.length === 0)
       ) {
         this.albumMissingCb()
       }

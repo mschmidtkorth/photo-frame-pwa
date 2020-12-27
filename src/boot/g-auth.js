@@ -42,6 +42,9 @@ function GAuth (store) {
   }
 
   this.initClient = async function () {
+    if (!navigator.onLine) {
+      return
+    }
     if (!store.authReady || !window.gapi) {
       await this.installClient()
       this.gapi = await this.loadGapi()

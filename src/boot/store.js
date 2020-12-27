@@ -6,7 +6,7 @@ export const store = Vue.observable({
   authReady: false,
   authInProgress: false,
   isSignedIn: false,
-  images: [],
+  images: LocalStorage.getItem('images') ?? [],
   imagesLoading: false,
   slideSpeed: LocalStorage.getItem('slideSpeed') ?? 8,
   autoplay: true,

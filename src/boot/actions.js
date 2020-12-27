@@ -35,6 +35,7 @@ export const actions = {
     if (store.images.length === 0) {
       // nothing to merge
       store.images = val
+      actions.setLocalStorage('images', val)
       return
     }
     for (var i = store.images.length - 1; i > -1; i--) {
@@ -70,6 +71,7 @@ export const actions = {
       store.newImages = true
       console.log('inserted image')
     }
+    actions.setLocalStorage('images', val)
   },
   markImagesRead: function () {
     // set the current list of imageId{s in localStorage
@@ -86,6 +88,9 @@ export const actions = {
     store.currentSlideIndex--
   },
   loadImages: async function (background) {
+    if (!navigator.onLine) {
+      return
+    }
     store.imagesLoading = !background
     const images = await loadImages(store.albumTitle)
     actions.setImages(images)

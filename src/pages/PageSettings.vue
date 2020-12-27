@@ -78,6 +78,14 @@
         <a href="https://photos.google.com" target="_blank">Google Photos</a>
         and add at least 1 photo.
       </q-banner>
+      <q-banner
+        v-show="!navigator.onLine"
+        inline-actions
+        class="text-white bg-warning"
+        animated
+      >
+        You are currently offline, please check your internet connection.
+      </q-banner>
     </div>
   </q-page>
 </template>
@@ -92,6 +100,7 @@ export default {
       apikey: store.apikey,
       albumTitle: store.albumTitle,
       slideSpeed: store.slideSpeed,
+      navigator: navigator,
       $store: store
     }
   },
@@ -119,7 +128,9 @@ export default {
           // this.apikey = ''
           this.$q.dialog({
             class: 'warning',
-            message: `Could not authorize ${this.$store.appName}, try checking the api key.`
+            message: navigator.onLine
+              ? `Could not authorize ${this.$store.appName}, try checking the api key.`
+              : 'You are currently offline'
           })
         }
       }

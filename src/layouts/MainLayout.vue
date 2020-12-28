@@ -22,7 +22,6 @@
           name="slideshow"
           icon="panorama"
           label="Slideshow"
-          :disable="$store.images.length === 0"
         />
         <q-route-tab
           to="/settings"
@@ -51,7 +50,6 @@ export default {
   data () {
     return {
       tab: 'settings',
-      showAppInstallBanner: false,
       version: process.env.VERSION,
       $store: store
     }
@@ -60,49 +58,49 @@ export default {
     AppUpdateBanner,
     AppInstallBanner
   },
+
   methods: {
-    albumMissingCb () {
-      if (this.$router.currentRoute.name !== 'Settings') {
-        this.$router.push({ name: 'Settings' })
-      }
-      this.$q.loading.hide()
-    }
-  },
-  created () {
-    this.$actions.albumMissingCb = this.albumMissingCb
-    // console.log('process.env: ', process.env.VERSION)
-    updateTimeout = setInterval(function () {
-      console.log('registration: ', store.registration)
+    // albumMissingCb () {
+    //   if (this.$router.currentRoute.name !== 'Settings') {
+    //     this.$router.push({ name: 'Settings' })
+    //   }
+    // },
+    updateRegistration () {
       if (store.registration && !store.registration.waiting) {
         store.registration.update()
       }
-    }, 1000 * 60)
+    }
+  },
+  created () {
+    // this.$actions.albumMissingCb = this.albumMissingCb
+    // console.log('process.env: ', process.env.VERSION)
+    updateTimeout = setInterval(
+      function () {
+        this.updateRegistration()
+      }.bind(this),
+      1000 * 60
+    )
   },
   async mounted () {
     this.interval = setInterval(async () => {
-      await this.$actions.loadImages(false)
+      await this.$actions.loadImages(true)
     }, 1800000)
-    if (!this.$store.authReady || this.$store.images.length === 0) {
-      // check for valid api key, if not try to load from url
+    this.updateRegistration()
 
-      var urlParams = new URLSearchParams(window.location.search)
-      if (urlParams.has('apikey')) {
-        this.$actions.setLocalStorage('apikey', urlParams.get('apikey'))
-        window.location.replace(window.location.origin)
-      }
+    // if (!this.$store.authReady || this.$store.images.length === 0) {
 
-      try {
-        await this.$gAuth.initClient()
-      } catch (e) {
-        console.log('error: ' + e.message)
-      }
-      if (
-        (!this.$store.authReady || !this.$store.isSignedIn) &&
-        (navigator.onLine || this.$store.images.length === 0)
-      ) {
-        this.albumMissingCb()
-      }
+    try {
+      await this.$gAuth.initClient()
+    } catch (e) {
+      console.log('error: ' + e.message)
     }
+    //   if (
+    //     (!this.$store.authReady || !this.$store.isSignedIn) &&
+    //     (navigator.onLine || this.$store.images.length === 0)
+    //   ) {
+    //     this.albumMissingCb()
+    //   }
+    // }
   },
   beforeDestroy () {
     if (updateTimeout) {

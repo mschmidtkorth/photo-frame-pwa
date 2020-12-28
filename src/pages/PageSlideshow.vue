@@ -2,6 +2,7 @@
   <div class="">
     <q-carousel
       swipeable
+      :class="{ hidden: !$store.albumLoaded && !$store.imagesLoading }"
       v-model="$store.currentSlideIndex"
       :autoplay="$store.autoplay ? parseInt($store.slideSpeed) * 1000 : 0"
       transition-next="slide-fade"
@@ -121,6 +122,7 @@
         </q-carousel-control>
       </template>
     </q-carousel>
+    <settings-banner></settings-banner>
   </div>
 </template>
 
@@ -128,6 +130,7 @@
 import { store } from '../boot/store'
 import { actions } from '../boot/actions'
 import axios from 'axios'
+import SettingsBanner from 'src/components/SettingsBanner.vue'
 
 let timeout = null
 let wakeLock = null
@@ -153,6 +156,7 @@ const handleVisibilityChange = async () => {
 }
 document.addEventListener('visibilitychange', handleVisibilityChange)
 export default {
+  components: { SettingsBanner },
   data () {
     return {
       controlClass: 'hidden',
@@ -165,6 +169,9 @@ export default {
     }
   },
   computed: {
+    imagesLoading () {
+      return store.imagesLoading
+    },
     images () {
       if (this.$store.images.length > 0) {
         this.$q.loading.hide()
@@ -201,8 +208,14 @@ export default {
       if (!val && this.fullscreen) {
         this.toggleFullScreen()
       }
+    },
+    imagesLoading: function (val) {
+      if (!val) {
+        this.$q.loading.hide()
+      }
     }
   },
+
   methods: {
     showControls: function () {
       this.controlClass = ''
@@ -241,6 +254,7 @@ export default {
       // alert('Wake lock not supported')
       console.log('wakelock:', 'wakeLock' in navigator)
     }
+    await this.$actions.loadImages(false)
   },
   async beforeDestroy () {
     if ('wakeLock' in navigator) {

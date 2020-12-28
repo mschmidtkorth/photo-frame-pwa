@@ -17,13 +17,18 @@ const routes = [
         path: 'help',
         name: 'Help',
         component: () => import('pages/PageHelp.vue')
-      },
-      {
-        path: 'dev',
-        name: 'Dev Tips',
-        component: () => import('pages/PageDevTips.vue')
       }
     ]
+  },
+  {
+    path: '/dev',
+    name: 'Dev Tips',
+    component: () => import('pages/PageDevTips.vue')
+  },
+  {
+    path: '/console',
+    name: 'Console',
+    component: () => import('pages/PageConsole.vue')
   },
   // Always leave this as last one,
   // but you can also remove it

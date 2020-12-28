@@ -3,6 +3,7 @@ import { shuffle } from '../utils/arrayUtil'
 import { loadImages } from '../services/imageService'
 import { LocalStorage } from 'quasar'
 import { store } from './store'
+import { gauth } from './g-auth'
 
 export const actions = {
   setLocalStorage: function (key, val) {
@@ -87,13 +88,33 @@ export const actions = {
     store.currentSlideIndex++
     store.currentSlideIndex--
   },
-  loadImages: async function (background) {
+  _loadImages: async function () {
+    const images =
+      (await loadImages(store.albumTitle, store.isSharedAlbum)) ?? []
+    actions.setImages(images)
+    store.imagesLoading = false
+    if (images.length > 0) {
+      store.albumLoaded = true
+    }
+  },
+  loadImages: async function () {
     if (!navigator.onLine) {
+      if (store.images.length > 0) {
+        store.albumLoaded = true
+      }
       return
     }
-    store.imagesLoading = !background
-    const images = await loadImages(store.albumTitle)
-    actions.setImages(images)
+    store.imagesLoading = true
+    // TODO if this returns no auth exception then init client, then try again, probably will need a callback passed
+    try {
+      await this._loadImages()
+    } catch (e) {
+      // Init Client if necessa
+      await gauth.initClient()
+      if (store.isSignedIn) {
+        await this._loadImages()
+      }
+    }
     store.imagesLoading = false
   }
 }

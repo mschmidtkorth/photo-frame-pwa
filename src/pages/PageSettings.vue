@@ -23,18 +23,38 @@
             'Please enter a slide duration in seconds'
         ]"
       />
-      <q-input
-        filled
-        v-model="albumTitle"
-        label="Google Photos Album Title"
-        hint="Use Google Photos to create the album"
-        lazy-rules
-        :rules="[
-          val =>
-            (val !== null && val !== '') ||
-            'Enter a photo album title from your Google Photos account'
-        ]"
-      />
+      <div class="row">
+        <div class="col-12 col-sm-8">
+          <q-input
+            filled
+            v-model="albumTitle"
+            label="Google Photos Album Title"
+            hint="Use Google Photos to create the album"
+            lazy-rules
+            :rules="[
+              val =>
+                (val !== null && val !== '') ||
+                'Enter a photo album title from your Google Photos account'
+            ]"
+          />
+        </div>
+        <div class="col-12 col-sm-4 q-pa-md">
+          <q-checkbox
+            left-label
+            v-model="isSharedAlbum"
+            label="Shared to you"
+          />
+        </div>
+      </div>
+      <div>
+        <q-btn
+          label="Reload Album"
+          color="primary"
+          @click="$actions.loadImages()"
+          :loading="$store.imagesLoading"
+          :disabled="!$store.isSignedIn || $store.imagesLoading"
+        ></q-btn>
+      </div>
       <q-toggle
         :disable="false"
         :value="$store.isSignedIn"
@@ -50,7 +70,7 @@
 
     <div class="text-center">
       <q-banner
-        v-show="$store.images.length > 0 && $store.isSignedIn"
+        v-show="$store.albumLoaded"
         inline-actions
         class="text-white bg-positive"
         animated
@@ -100,7 +120,9 @@ export default {
       apikey: store.apikey,
       albumTitle: store.albumTitle,
       slideSpeed: store.slideSpeed,
-      $store: store
+      isSharedAlbum: store.isSharedAlbum,
+      $store: store,
+      $actions: actions
     }
   },
   watch: {
@@ -109,10 +131,14 @@ export default {
     },
     albumTitle: function (val) {
       actions.setLocalStorage('albumTitle', val)
-      store.isSignedIn = false
+      store.albumLoaded = false
     },
     slideSpeed: function (val) {
       actions.setLocalStorage('slideSpeed', val)
+    },
+    isSharedAlbum: function (val) {
+      actions.setLocalStorage('isSharedAlbum', val)
+      store.albumLoaded = false
     }
   },
   methods: {
@@ -122,6 +148,9 @@ export default {
       } else {
         try {
           await this.$gAuth.signIn()
+          if (this.$store.isSignedIn) {
+            await this.$actions.loadImages()
+          }
         } catch (e) {
           console.log('error: ', e)
           // this.apikey = ''

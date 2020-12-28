@@ -1,10 +1,20 @@
-const loadAlbums = function () {
-  return window.gapi.client.photoslibrary.albums
-    .list({})
-    .then(function (fullResponse) {
-      const albums = fullResponse.result.albums
-      return albums
-    })
+const loadAlbums = function (shared) {
+  // TODO if shared pull both personal and shared and filter out those that are in personal
+  if (shared) {
+    return window.gapi.client.photoslibrary.sharedAlbums
+      .list({})
+      .then(function (fullResponse) {
+        const albums = fullResponse.result.sharedAlbums
+        return albums
+      })
+  } else {
+    return window.gapi.client.photoslibrary.albums
+      .list({})
+      .then(function (fullResponse) {
+        const albums = fullResponse.result.albums
+        return albums
+      })
+  }
 }
 const getImages = async function (id) {
   let images = []
@@ -45,12 +55,13 @@ const getImages = async function (id) {
   }
   return images
 }
-const loadImages = async function (albumTitle) {
-  const albums = await loadAlbums()
+const loadImages = async function (albumTitle, shared) {
+  // TODO return null if can't load albums (no auth)
+  const albums = await loadAlbums(shared)
   const result = albums.filter(a => {
     return a.title === albumTitle
   })
-  if (result.length !== 1) {
+  if (result.length < 1) {
     // TODO show user a message about creating album
     console.log("'Photo Frame' album not found")
     return

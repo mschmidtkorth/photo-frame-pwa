@@ -1,3 +1,5 @@
+## Dev Tips
+
 ### Things learned
 
 - Windows has an animations setting that can be turned on and off and that stops browser animations. animate.style has more info
@@ -51,3 +53,6 @@ https://github.com/34fame?tab=repositories
 
 History mode on github.io:
 https://dev.to/quasar/publish-your-quasar-spa-on-github-io-with-history-mode-20h2
+
+Workbox recipes (hard to find by googling):
+https://developers.google.com/web/tools/workbox/modules/workbox-recipes

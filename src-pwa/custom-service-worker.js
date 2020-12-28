@@ -17,6 +17,7 @@ import {
 } from 'workbox-strategies'
 import { ExpirationPlugin } from 'workbox-expiration'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
+import { imageCache, googleFontsCache } from 'workbox-recipes'
 
 /*
   config
@@ -49,22 +50,23 @@ registerRoute(
   ({ url }) => url.host.startsWith('apis.google.com'),
   new NetworkOnly()
 )
-// TODO add networkonly for album apis
+imageCache()
+googleFontsCache()
 
-registerRoute(
-  ({ url }) => url.host.startsWith('fonts.g'),
-  new CacheFirst({
-    cacheName: 'google-fonts',
-    plugins: [
-      new ExpirationPlugin({
-        maxEntries: 30
-      }),
-      new CacheableResponsePlugin({
-        statuses: [0, 200]
-      })
-    ]
-  })
-)
+// registerRoute(
+//   ({ url }) => url.host.startsWith('fonts.g'),
+//   new CacheFirst({
+//     cacheName: 'google-fonts',
+//     plugins: [
+//       new ExpirationPlugin({
+//         maxEntries: 30
+//       }),
+//       new CacheableResponsePlugin({
+//         statuses: [0, 200]
+//       })
+//     ]
+//   })
+// )
 
 // registerRoute(
 //   ({ url }) => url.href.startsWith('http'),

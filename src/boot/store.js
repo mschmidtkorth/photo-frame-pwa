@@ -8,6 +8,7 @@ export const store = Vue.observable({
   isSignedIn: false,
   images: LocalStorage.getItem('images') ?? [],
   imagesLoading: false,
+  albumLoaded: false,
   slideSpeed: LocalStorage.getItem('slideSpeed') ?? 8,
   autoplay: true,
   apikey: LocalStorage.getItem('apikey'),
@@ -17,7 +18,9 @@ export const store = Vue.observable({
   registration: null,
   appName: process.env.appName,
   albumTitle: LocalStorage.getItem('albumTitle') ?? 'PhotoAh',
+  isSharedAlbum: LocalStorage.getItem('isSharedAlbum') ?? false,
   onLine: navigator.onLine,
+  logs: [],
   validApikey: function () {
     return !empty(this.apikey)
   }

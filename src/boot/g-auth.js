@@ -36,9 +36,6 @@ function GAuth (store) {
     }
     const user = this.authInstance.currentUser.get()
     store.isSignedIn = user.hasGrantedScopes(SCOPE)
-    if (store.isSignedIn) {
-      await actions.loadImages(false)
-    }
   }
 
   this.initClient = async function () {
@@ -81,10 +78,8 @@ function GAuth (store) {
       }
       if (!this.authInstance.isSignedIn.get()) {
         await this.authInstance.signIn()
-      } else {
-        // handle album change
-        await this.setSigninStatus()
       }
+      store.isSignedIn = true
     } finally {
       store.authInProgress = false
     }
@@ -96,6 +91,7 @@ function GAuth (store) {
     store.images = []
   }
 }
+export const gauth = new GAuth(store)
 export default boot(async ({ Vue }) => {
-  Vue.prototype.$gAuth = new GAuth(store)
+  Vue.prototype.$gAuth = gauth
 })

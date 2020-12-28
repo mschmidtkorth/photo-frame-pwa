@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import routes from './routes'
-
+import { actions } from '../boot/actions'
 Vue.use(VueRouter)
 
 /*
@@ -26,6 +26,11 @@ export default function (/* { store, ssrContext } */) {
     base: process.env.VUE_ROUTER_BASE
   })
   Router.beforeEach((to, from, next) => {
+    var urlParams = new URLSearchParams(window.location.search)
+    if (urlParams.has('apikey')) {
+      actions.setLocalStorage('apikey', urlParams.get('apikey'))
+      window.location.replace(window.location.origin)
+    }
     document.title = `${to.name} | ${process.env.appName}`
     next()
   })

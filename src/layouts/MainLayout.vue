@@ -44,6 +44,7 @@
 import { store } from '../boot/store'
 import AppUpdateBanner from 'src/components/AppUpdateBanner.vue'
 import AppInstallBanner from 'src/components/AppInstallBanner.vue'
+let updateTimeout = null
 
 export default {
   name: 'MainLayout',
@@ -70,6 +71,12 @@ export default {
   created () {
     this.$actions.albumMissingCb = this.albumMissingCb
     // console.log('process.env: ', process.env.VERSION)
+    updateTimeout = setInterval(function () {
+      console.log('registration: ', store.registration)
+      if (store.registration && !store.registration.waiting) {
+        store.registration.update()
+      }
+    }, 1000 * 60)
   },
   async mounted () {
     this.interval = setInterval(async () => {
@@ -95,6 +102,11 @@ export default {
       ) {
         this.albumMissingCb()
       }
+    }
+  },
+  beforeDestroy () {
+    if (updateTimeout) {
+      clearInterval(updateTimeout)
     }
   }
 }

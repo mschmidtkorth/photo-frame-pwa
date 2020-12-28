@@ -8,7 +8,13 @@
 - To pick a "natural" color, copy a screen shot and paste into Paint.net and use the color picker
 - show "Waiting for new images..." if new images is on and no images
 - use FileReader to convert bytes to base 64 encodeed
--
+
+### App Updated notification flow
+
+- ```MainLayout.vue.created()``` sets up an interval which calls ```store.registration.update()``` every 60 seconds
+- If an update is found the updated hook in ```register-service-worker.js``` is fired and the updated method sets ```store.showAppUpdatedBanner = true```
+- If use clicks "Yes" the ```AppUpdateBanner.vue``` component posts a message to the service-worker to "SKIP_WAITING" and reloads the app bt calling ```window.location.reload()```
+### Links
 
 Danny's links:
 http://dconnell.co.uk/#/resource/vscode

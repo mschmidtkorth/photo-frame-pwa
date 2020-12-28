@@ -130,7 +130,6 @@ import { actions } from '../boot/actions'
 import axios from 'axios'
 
 let timeout = null
-let updateTimeout = null
 let wakeLock = null
 
 const requestWakeLock = async () => {
@@ -242,20 +241,11 @@ export default {
       // alert('Wake lock not supported')
       console.log('wakelock:', 'wakeLock' in navigator)
     }
-    updateTimeout = setInterval(function () {
-      console.log('registration: ', store.registration)
-      if (store.registration && !store.registration.waiting) {
-        store.registration.update()
-      }
-    }, 1000 * 60)
   },
   async beforeDestroy () {
     if ('wakeLock' in navigator) {
       wakeLock.release()
       // wakeLock = null
-    }
-    if (updateTimeout) {
-      clearInterval(updateTimeout)
     }
   }
 }

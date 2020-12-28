@@ -79,7 +79,7 @@
         and add at least 1 photo.
       </q-banner>
       <q-banner
-        v-show="!onLine"
+        v-show="!$store.onLine"
         inline-actions
         class="text-white bg-warning"
         animated
@@ -100,7 +100,6 @@ export default {
       apikey: store.apikey,
       albumTitle: store.albumTitle,
       slideSpeed: store.slideSpeed,
-      onLine: navigator.onLine,
       $store: store
     }
   },

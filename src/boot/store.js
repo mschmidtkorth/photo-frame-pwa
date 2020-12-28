@@ -17,10 +17,12 @@ export const store = Vue.observable({
   registration: null,
   appName: process.env.appName,
   albumTitle: LocalStorage.getItem('albumTitle') ?? 'PhotoAh',
-
+  onLine: navigator.onLine,
   validApikey: function () {
     return !empty(this.apikey)
   }
 })
+window.ononline = () => (store.onLine = true)
+window.onoffline = () => (store.onLine = false)
 
 Vue.prototype.$store = store

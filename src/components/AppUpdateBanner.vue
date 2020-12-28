@@ -61,7 +61,7 @@ export default {
       if (store.registration && store.registration.waiting) {
         store.registration.waiting.postMessage({ type: 'SKIP_WAITING' })
       }
-      window.location.reload()
+      window.location.reload(true)
     }
   }
 }

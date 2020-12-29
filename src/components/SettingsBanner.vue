@@ -5,7 +5,7 @@
     leave-active-class="animated fadeOut"
   >
     <div
-      v-if="!$store.albumLoaded && showBanner"
+      v-if="!$store.albumLoaded && !$store.imagesLoading && showBanner"
       class="banner-container bg-red"
     >
       <div class="constrain-banner">

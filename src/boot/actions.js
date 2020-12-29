@@ -6,6 +6,7 @@ import { store } from './store'
 import { gauth } from './g-auth'
 
 export const actions = {
+  store: store,
   setLocalStorage: function (key, val) {
     if (val === 'null' || val === null) return
     store[key] = val
@@ -14,7 +15,7 @@ export const actions = {
 
   setImages: function (val) {
     if (val === undefined || val.length === 0) {
-      store.images = []
+      this.store.images = []
       if (actions.albumMissingCb) {
         actions.albumMissingCb()
       }
@@ -24,38 +25,38 @@ export const actions = {
     lsReadImageIds = lsReadImageIds === null ? [] : lsReadImageIds
 
     // Set the read flag on incoming images
-    store.newImages = false
+    this.store.newImages = false
     val.forEach(i => {
       i.new = lsReadImageIds.indexOf(i.id) === -1
       i.updated = false
       if (i.new) {
-        store.newImages = true
+        this.store.newImages = true
       }
     })
 
-    if (store.images.length === 0) {
+    if (this.store.images.length === 0) {
       // nothing to merge
-      store.images = val
+      this.store.images = val
       actions.setLocalStorage('images', val)
       return
     }
-    for (var i = store.images.length - 1; i > -1; i--) {
-      const newImage = val.find(v => v.id === store.images[i].id)
+    for (var i = this.store.images.length - 1; i > -1; i--) {
+      const newImage = val.find(v => v.id === this.store.images[i].id)
       if (newImage === undefined) {
         // if not in val splice it out
-        store.images.splice(i, 1)
+        this.store.images.splice(i, 1)
       } else {
         // if exists in val, update it using splice
         if (
-          store.images[i].baseUrl !== newImage.baseUrl ||
-          store.images[i].new !== newImage.new
+          this.store.images[i].baseUrl !== newImage.baseUrl ||
+          this.store.images[i].new !== newImage.new
         ) {
-          store.images[i].baseUrl = newImage.baseUrl
-          store.images[i].new = newImage.new
+          this.store.images[i].baseUrl = newImage.baseUrl
+          this.store.images[i].new = newImage.new
           if (newImage.new) {
-            store.newImages = true
+            this.store.newImages = true
           }
-          store.images.splice(i, 1, store.images[i])
+          this.store.images.splice(i, 1, this.store.images[i])
         }
         newImage.updated = true
       }
@@ -63,52 +64,50 @@ export const actions = {
     const newImages = val.filter(i => !i.updated)
 
     if (newImages.length > 0) {
-      const allImages = newImages.concat(store.images)
-      store.images = allImages
-      store.currentSlideIndex = 0
-      store.newImages = true
+      const allImages = newImages.concat(this.store.images)
+      this.store.images = allImages
+      this.store.currentSlideIndex = 0
+      this.store.newImages = true
     }
     actions.setLocalStorage('images', val)
   },
   markImagesRead: function () {
-    const ids = store.images.map(i => {
+    const ids = this.store.images.map(i => {
       i.new = false
       return i.id
     })
     LocalStorage.set('readIds', ids)
-    store.newImages = false
+    this.store.newImages = false
   },
   shuffleImages: function () {
-    store.images = shuffle(store.images)
-    store.currentSlideIndex++
-    store.currentSlideIndex--
+    this.store.images = shuffle(this.store.images)
+    this.store.currentSlideIndex++
+    this.store.currentSlideIndex--
   },
   _loadImages: async function () {
     const images =
-      (await loadImages(store.albumTitle, store.isSharedAlbum)) ?? []
+      (await loadImages(this.store.albumTitle, this.store.isSharedAlbum)) ?? []
     actions.setImages(images)
-    store.imagesLoading = false
-    if (images.length > 0) {
-      store.albumLoaded = true
-    }
+    this.store.imagesLoading = false
+    this.store.albumLoaded = images.length > 0
   },
   loadImages: async function () {
     if (!navigator.onLine) {
-      if (store.images.length > 0) {
-        store.albumLoaded = true
-      }
+      this.store.albumLoaded = this.store.images.length > 0
       return
     }
-    store.imagesLoading = true
+    this.store.imagesLoading = true
     try {
       await this._loadImages()
     } catch (e) {
       await gauth.initClient()
-      if (store.isSignedIn) {
+      if (this.store.isSignedIn) {
         await this._loadImages()
+      } else {
+        this.store.albumLoaded = this.store.images.length > 0
       }
     }
-    store.imagesLoading = false
+    this.store.imagesLoading = false
   }
 }
 

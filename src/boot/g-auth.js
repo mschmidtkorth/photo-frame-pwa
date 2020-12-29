@@ -88,7 +88,6 @@ function GAuth (store) {
     this.authInstance.signOut()
     this.authInstance = null
     store.isSignedIn = false
-    store.images = []
   }
 }
 export const gauth = new GAuth(store)

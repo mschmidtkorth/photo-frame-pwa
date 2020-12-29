@@ -50,7 +50,7 @@
         <q-btn
           label="Reload Album"
           color="primary"
-          @click="$actions.loadImages()"
+          @click="reloadAlbum()"
           :loading="$store.imagesLoading"
           :disabled="!$store.isSignedIn || $store.imagesLoading"
         ></q-btn>
@@ -70,7 +70,11 @@
 
     <div class="text-center">
       <q-banner
-        v-show="$store.albumLoaded"
+        v-show="
+          $store.albumLoaded &&
+            $store.images.length !== 0 &&
+            !$store.albumTitleChanged
+        "
         inline-actions
         class="text-white bg-positive"
         animated
@@ -87,14 +91,15 @@
             $store.authReady &&
             $store.isSignedIn &&
             !$store.imagesLoading &&
-            $store.images.length === 0
+            $store.images.length === 0 &&
+            !$store.albumTitleChanged
         "
         inline-actions
         class="text-white bg-red"
         animated
       >
-        PhotoAh album not found or it is empty, please create an album titled
-        "PhotoAh" in your
+        "{{ $store.albumTitle }}" album not found or it is empty, please create
+        an album titled "{{ $store.albumTitle }}" in your
         <a href="https://photos.google.com" target="_blank">Google Photos</a>
         and add at least 1 photo.
       </q-banner>
@@ -132,6 +137,7 @@ export default {
     albumTitle: function (val) {
       actions.setLocalStorage('albumTitle', val)
       store.albumLoaded = false
+      store.albumTitleChanged = true
     },
     slideSpeed: function (val) {
       actions.setLocalStorage('slideSpeed', val)
@@ -142,6 +148,10 @@ export default {
     }
   },
   methods: {
+    reloadAlbum: async function () {
+      store.albumTitleChanged = false
+      this.$actions.loadImages()
+    },
     setAuthStatus: async function () {
       if (this.$store.isSignedIn) {
         this.$gAuth.signOut()

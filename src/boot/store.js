@@ -9,6 +9,7 @@ export const store = Vue.observable({
   images: LocalStorage.getItem('images') ?? [],
   imagesLoading: false,
   albumLoaded: false,
+  albumTitleChanged: false,
   slideSpeed: LocalStorage.getItem('slideSpeed') ?? 8,
   autoplay: true,
   apikey: LocalStorage.getItem('apikey'),

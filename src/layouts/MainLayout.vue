@@ -78,7 +78,7 @@ export default {
       async function () {
         await this.$actions.loadImages(true)
       }.bind(this),
-      30 * 1000
+      30 * 60 * 1000
     )
   },
   async mounted () {

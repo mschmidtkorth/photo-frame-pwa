@@ -44,7 +44,6 @@ export const actions = {
       if (newImage === undefined) {
         // if not in val splice it out
         store.images.splice(i, 1)
-        console.log('deleted image')
       } else {
         // if exists in val, update it using splice
         if (
@@ -59,23 +58,19 @@ export const actions = {
           store.images.splice(i, 1, store.images[i])
         }
         newImage.updated = true
-        console.log('updated image')
       }
     }
     const newImages = val.filter(i => !i.updated)
 
     if (newImages.length > 0) {
       const allImages = newImages.concat(store.images)
-      // store.images.unshift(...newImages)
       store.images = allImages
       store.currentSlideIndex = 0
       store.newImages = true
-      console.log('inserted image')
     }
     actions.setLocalStorage('images', val)
   },
   markImagesRead: function () {
-    // set the current list of imageId{s in localStorage
     const ids = store.images.map(i => {
       i.new = false
       return i.id
@@ -105,11 +100,9 @@ export const actions = {
       return
     }
     store.imagesLoading = true
-    // TODO if this returns no auth exception then init client, then try again, probably will need a callback passed
     try {
       await this._loadImages()
     } catch (e) {
-      // Init Client if necessa
       await gauth.initClient()
       if (store.isSignedIn) {
         await this._loadImages()

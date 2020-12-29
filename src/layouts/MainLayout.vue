@@ -44,6 +44,7 @@ import { store } from '../boot/store'
 import AppUpdateBanner from 'src/components/AppUpdateBanner.vue'
 import AppInstallBanner from 'src/components/AppInstallBanner.vue'
 let updateTimeout = null
+let newImagesTimeout = null
 
 export default {
   name: 'MainLayout',
@@ -60,11 +61,6 @@ export default {
   },
 
   methods: {
-    // albumMissingCb () {
-    //   if (this.$router.currentRoute.name !== 'Settings') {
-    //     this.$router.push({ name: 'Settings' })
-    //   }
-    // },
     updateRegistration () {
       if (store.registration && !store.registration.waiting) {
         store.registration.update()
@@ -72,39 +68,33 @@ export default {
     }
   },
   created () {
-    // this.$actions.albumMissingCb = this.albumMissingCb
-    // console.log('process.env: ', process.env.VERSION)
     updateTimeout = setInterval(
       function () {
         this.updateRegistration()
       }.bind(this),
       1000 * 60
     )
+    newImagesTimeout = setInterval(
+      async function () {
+        await this.$actions.loadImages(true)
+      }.bind(this),
+      30 * 1000
+    )
   },
   async mounted () {
-    this.interval = setInterval(async () => {
-      await this.$actions.loadImages(true)
-    }, 1800000)
     this.updateRegistration()
-
-    // if (!this.$store.authReady || this.$store.images.length === 0) {
-
     try {
       await this.$gAuth.initClient()
     } catch (e) {
       console.log('error: ' + e.message)
     }
-    //   if (
-    //     (!this.$store.authReady || !this.$store.isSignedIn) &&
-    //     (navigator.onLine || this.$store.images.length === 0)
-    //   ) {
-    //     this.albumMissingCb()
-    //   }
-    // }
   },
   beforeDestroy () {
     if (updateTimeout) {
       clearInterval(updateTimeout)
+    }
+    if (newImagesTimeout) {
+      clearInterval(newImagesTimeout)
     }
   }
 }

@@ -134,20 +134,26 @@ import SettingsBanner from 'src/components/SettingsBanner.vue'
 
 let timeout = null
 let wakeLock = null
+let wakeLockAutoPlayState = null
 
 const requestWakeLock = async () => {
   try {
     wakeLock = await navigator.wakeLock.request('screen')
     wakeLock.addEventListener('release', () => {
-      console.log('Screen Wake Lock released:', wakeLock.released)
+      console.log('Screen Wake Lock released')
+      wakeLockAutoPlayState = store.autoplay
+      store.autoplay = false
     })
-    console.log('Screen Wake Lock released:', wakeLock.released)
+    console.log('Screen Wake Lock acquired')
   } catch (err) {
     console.error(`${err.name}, ${err.message}`)
   }
 }
 const handleVisibilityChange = async () => {
   if (wakeLock !== null && document.visibilityState === 'visible') {
+    if (wakeLockAutoPlayState) {
+      store.autoplay = true
+    }
     await requestWakeLock()
     if (store.registration && !store.registration.waiting) {
       store.registration.update()

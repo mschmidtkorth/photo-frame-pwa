@@ -1,5 +1,5 @@
 <template>
-  <q-page class="constrain q-pa-md">
+  <q-page class="constrain q-pa-md" id="pageSettings">
     <q-form class="q-gutter-md q-pa-lg">
       <q-input
         filled
@@ -27,6 +27,7 @@
         <div class="col-12 col-sm-8">
           <q-input
             filled
+            for="albumTitle"
             v-model="albumTitle"
             label="Google Photos Album Title"
             hint="Use Google Photos to create the album"
@@ -48,6 +49,7 @@
       </div>
       <div>
         <q-btn
+          id="btnReload"
           label="Reload Album"
           color="primary"
           @click="reloadAlbum()"
@@ -119,7 +121,7 @@
 import { store } from '../boot/store'
 import { actions } from '../boot/actions'
 export default {
-  name: 'PageHome',
+  name: 'PageSettings',
   data () {
     return {
       apikey: store.apikey,
@@ -173,6 +175,9 @@ export default {
         }
       }
     }
+  },
+  mounted () {
+    window.__vue_mounted = 'PageSettings'
   }
 }
 </script>

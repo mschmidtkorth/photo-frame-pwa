@@ -1,0 +1,5 @@
+;Example Comment
+;Turn on step logging to console
+console?true
+focus?#albumTitle
+press?Tab,Tab,Enter

@@ -9,7 +9,12 @@
       class="banner-container bg-red"
     >
       <div class="constrain-banner">
-        <q-banner dense inline-actions class="bg-red text-white">
+        <q-banner
+          name="settings-banner"
+          dense
+          inline-actions
+          class="bg-red text-white"
+        >
           <template v-slot:avatar>
             <q-avatar
               name="error"

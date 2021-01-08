@@ -9,7 +9,12 @@
       class="banner-container bg-primary"
     >
       <div class="constrain-banner">
-        <q-banner dense inline-actions class="bg-primary text-white">
+        <q-banner
+          name="update-banner"
+          dense
+          inline-actions
+          class="bg-primary text-white"
+        >
           <template v-slot:avatar>
             <q-avatar
               name="signal_wifi_off"

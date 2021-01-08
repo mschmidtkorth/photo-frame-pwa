@@ -72,7 +72,7 @@ export default {
       function () {
         this.updateRegistration()
       }.bind(this),
-      1000 * 60
+      1000 * 60 * 30
     )
     newImagesTimeout = setInterval(
       async function () {

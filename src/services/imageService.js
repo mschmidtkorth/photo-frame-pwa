@@ -66,7 +66,7 @@ const loadImages = async function (albumTitle, shared) {
     console.log("'Photo Frame' album not found")
     return
   }
-  return await getImages(result[0].id)
+  return getImages(result[0].id)
 }
 
 export { loadImages }

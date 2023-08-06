@@ -1,3 +1,6 @@
+# START VIA `export NODE_OPTIONS=--openssl-legacy-provider && quasar dev -m pwa `, then inspect HTML and remove q__loading
+
+
 # Photo Frame (photo-frame-pwa)
 
 Photo Viewer

@@ -1,49 +1,20 @@
 <template>
-  <transition
-    appear
-    enter-active-class="animated bounceIn"
-    leave-active-class="animated fadeOut"
-  >
-    <div
-      v-if="this.$store.showAppUpdatedBanner"
-      class="banner-container bg-primary"
-    >
-      <div class="constrain-banner">
-        <q-banner
-          name="update-banner"
-          dense
-          inline-actions
-          class="bg-primary text-white"
-        >
-          <template v-slot:avatar>
-            <q-avatar
-              name="signal_wifi_off"
-              color="primary"
-              icon="system_update"
-              font-size="22px"
-            />
-          </template>
-          <b>{{ this.$store.appName }} has an update pending, update now?</b>
-          <template v-slot:action>
-            <q-btn
-              dense
-              flat
-              label="Yes"
-              class="q-px-sm"
-              @click="updateApp(true)"
-            />
-            <q-btn
-              dense
-              flat
-              label="No"
-              class="q-px-sm"
-              @click="updateApp(false)"
-            />
-          </template>
-        </q-banner>
-      </div>
-    </div>
-  </transition>
+	<transition appear enter-active-class="animated bounceIn" leave-active-class="animated fadeOut">
+		<div v-if="$store.showAppUpdatedBanner" class="banner-container bg-primary">
+			<div class="constrain-banner">
+				<q-banner name="update-banner" dense inline-actions class="bg-primary text-white">
+					<template v-slot:avatar>
+						<q-avatar name="signal_wifi_off" color="primary" icon="system_update" font-size="22px" />
+					</template>
+					<b>{{ $store.appName }} has an update pending, update now?</b>
+					<template v-slot:action>
+						<q-btn dense flat label="Yes" class="q-px-sm" @click="updateApp(true)" />
+						<q-btn dense flat label="No" class="q-px-sm" @click="updateApp(false)" />
+					</template>
+				</q-banner>
+			</div>
+		</div>
+	</transition>
 </template>
 
 <script>
@@ -58,7 +29,7 @@ export default {
   },
   methods: {
     updateApp (yes) {
-      this.$store.showAppUpdatedBanner = false
+      $store.showAppUpdatedBanner = false
       if (!yes || refreshing) {
         return
       }

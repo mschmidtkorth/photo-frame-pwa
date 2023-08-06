@@ -3,7 +3,7 @@
     <q-header class="bg-primary">
       <q-toolbar class="constrain text-white">
         <q-toolbar-title class="text-bold text-fredoka-one">
-          {{ this.$store.appName }}
+          {{ $store.appName }}
         </q-toolbar-title>
         <div>v{{ version }}</div>
       </q-toolbar>

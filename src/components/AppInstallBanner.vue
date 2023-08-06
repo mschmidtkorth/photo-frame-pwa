@@ -15,7 +15,7 @@
               font-size="22px"
             />
           </template>
-          <b>Install {{ this.$store.appName }}?</b>
+          <b>Install {{ $store.appName }}?</b>
           <template v-slot:action>
             <q-btn dense flat label="Yes" class="q-px-sm" @click="installApp" />
             <q-btn

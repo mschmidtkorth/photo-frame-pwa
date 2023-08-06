@@ -8,17 +8,17 @@
       class="q-pa-md col-12-sm col-8-md col-6-lg shadow-1"
       style="max-width: 800px; width: 100%;"
     >
-      <q-markdown :src="markdown" />
+      <!-- <q-markdown :src="markdown" /> -->
     </div>
   </main>
 </template>
 
 <script>
-import markdown from '../markdown/help.md'
+// import markdown from '../markdown/help.md'
 export default {
   data () {
     return {
-      markdown: markdown
+      markdown: 'markdown'
     }
   }
 }

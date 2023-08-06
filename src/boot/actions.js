@@ -111,4 +111,4 @@ export const actions = {
   }
 }
 
-Vue.prototype.$actions = actions
+// Vue.prototype.$actions = actions

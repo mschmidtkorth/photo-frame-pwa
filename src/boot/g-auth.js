@@ -91,6 +91,6 @@ function GAuth (store) {
   }
 }
 export const gauth = new GAuth(store)
-export default boot(async ({ Vue }) => {
-  Vue.prototype.$gAuth = gauth
-})
+// export default boot(async ({ Vue }) => {
+//   Vue.prototype.$gAuth = gauth
+// })
